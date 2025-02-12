@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+html {
+    direction: rtl;
+    font-family: 'Your preferred font', sans-serif; /* Optional */
+  }
