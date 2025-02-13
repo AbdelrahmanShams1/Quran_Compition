@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { db } from "../firebase"; // استيراد db من firebase
+import { doc, getDoc, setDoc } from "firebase/firestore"; // استيراد getDoc و setDoc من Firestore
 
 const SignUp = () => {
   const [users, setUsers] = useState([]);
@@ -10,22 +12,18 @@ const SignUp = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const apiURL = "https://fake-api-quran-compition.vercel.app/users";
-      try {
-        const res = await fetch(apiURL);
-        const data = await res.json();
-        setUsers(data);
-      } catch (error) {
-        console.log('Error: ' + error);
-      }
+      // يمكنك استخدام هذه الوظيفة لعرض جميع المستخدمين، إن أردت
+      // const usersRef = collection(db, "users");
+      // const usersSnapshot = await getDocs(usersRef);
+      // const usersList = usersSnapshot.docs.map(doc => doc.data());
+      // setUsers(usersList);
     };
     fetchUsers();
-    console.log(users);
   }, []);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    
+
     const newUser = {
       name: name,
       email: email,
@@ -33,24 +31,25 @@ const SignUp = () => {
       activities: []
     };
 
-    const emailExists = users.some((user) => user.email === newUser.email);
-    if (emailExists) {
+    // التحقق من وجود البريد الإلكتروني في Firestore
+    const userRef = doc(db, "users", email); // استخدام البريد الإلكتروني كـ معرف فريد
+    const userDoc = await getDoc(userRef);
+
+    if (userDoc.exists()) {
+      // إذا كان المستخدم موجودًا
       alert("البريد الإلكتروني مسجل مسبقاً. يرجى استخدام بريد آخر.");
       return;
     }
 
-    setUsers((prevUsers) => [...prevUsers, newUser]);
-    alert("تم التسجيل بنجاح! يمكنك الآن تسجيل الدخول.");
-
- 
-    await fetch("https://fake-api-quran-compition.vercel.app/users", {
-      method: "POST", 
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(newUser)
-    });
-    navigate('/Quran_Compition')
+    // إذا لم يكن البريد الإلكتروني موجودًا، نقوم بتخزين المستخدم في Firestore
+    try {
+      await setDoc(userRef, newUser);
+      alert("تم التسجيل بنجاح! يمكنك الآن تسجيل الدخول.");
+      navigate('/Quran_Compition');
+    } catch (error) {
+      console.error("Error saving user to Firestore:", error.message);
+      alert("حدث خطأ أثناء التسجيل. حاول مرة أخرى.");
+    }
   };
 
   return (

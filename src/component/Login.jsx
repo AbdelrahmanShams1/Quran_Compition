@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { getDocs, collection } from "firebase/firestore";
+import { db } from "../firebase"; // تأكد من أن ملف firebase يحتوي على الكود الخاص بـ Firestore
 
 const Login = () => {
   const [users, setUsers] = useState([]);
-  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -11,23 +12,23 @@ const Login = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const apiURL = "https://fake-api-quran-compition.vercel.app/users";
       try {
-        const res = await fetch(apiURL);
-        const data = await res.json();
-        setUsers(data);
+        const querySnapshot = await getDocs(collection(db, "users"));
+        const usersData = querySnapshot.docs.map((doc) => doc.data());
+        setUsers(usersData);
       } catch (error) {
-        console.log('Error: ' + error);
-      } 
+        console.log("Error: " + error);
+      }
     };
     fetchUsers();
-    console.log(users)
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const user = users.find((user) => user.email === email && user.password === password);
+    const user = users.find(
+      (user) => user.email === email && user.password === password
+    );
 
     if (user) {
       navigate("/home");
@@ -46,9 +47,12 @@ const Login = () => {
         <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6 text-center">
           تسجيل الدخول
         </h2>
-        
+
         <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+          <label
+            htmlFor="email"
+            className="block text-gray-700 dark:text-gray-300 font-medium mb-2"
+          >
             البريد الإلكتروني
           </label>
           <input
@@ -64,7 +68,10 @@ const Login = () => {
         </div>
 
         <div className="mb-4">
-          <label htmlFor="password" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
+          <label
+            htmlFor="password"
+            className="block text-gray-700 dark:text-gray-300 font-medium mb-2"
+          >
             كلمة المرور
           </label>
           <input
