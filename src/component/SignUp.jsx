@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../firebase"; // استيراد db من firebase
-import { doc, getDoc, setDoc } from "firebase/firestore"; // استيراد getDoc و setDoc من Firestore
+import { db } from "../firebase"; 
+import { doc, getDoc, setDoc } from "firebase/firestore"; 
 
 const SignUp = () => {
   const [users, setUsers] = useState([]);
@@ -10,16 +10,7 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      // يمكنك استخدام هذه الوظيفة لعرض جميع المستخدمين، إن أردت
-      // const usersRef = collection(db, "users");
-      // const usersSnapshot = await getDocs(usersRef);
-      // const usersList = usersSnapshot.docs.map(doc => doc.data());
-      // setUsers(usersList);
-    };
-    fetchUsers();
-  }, []);
+
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -31,17 +22,17 @@ const SignUp = () => {
       activities: []
     };
 
-    // التحقق من وجود البريد الإلكتروني في Firestore
-    const userRef = doc(db, "users", email); // استخدام البريد الإلكتروني كـ معرف فريد
+   
+    const userRef = doc(db, "users", email);
     const userDoc = await getDoc(userRef);
 
     if (userDoc.exists()) {
-      // إذا كان المستخدم موجودًا
+     
       alert("البريد الإلكتروني مسجل مسبقاً. يرجى استخدام بريد آخر.");
       return;
     }
 
-    // إذا لم يكن البريد الإلكتروني موجودًا، نقوم بتخزين المستخدم في Firestore
+    
     try {
       await setDoc(userRef, newUser);
       alert("تم التسجيل بنجاح! يمكنك الآن تسجيل الدخول.");

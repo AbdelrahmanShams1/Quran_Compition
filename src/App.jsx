@@ -1,7 +1,7 @@
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
 import Login from './component/login';
 import SignUp from './component/SignUp';
-import Home from './component/home';
+import Home from './component/Home';
 
 
 const App = () => {
@@ -9,8 +9,8 @@ const App = () => {
     createRoutesFromElements(
     <>
     <Route path='/Quran_Compition' element={<Login />} />
-    <Route path="/signup" element={<SignUp />} />
-    <Route path="/home" element={<Home />} />
+    <Route path="Quran_Compition/signup" element={<SignUp />} />
+    <Route path="Quran_Compition/home" element={<Home />} />
     </>
     )
   );

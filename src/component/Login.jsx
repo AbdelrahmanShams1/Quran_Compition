@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getDocs, collection } from "firebase/firestore";
-import { db } from "../firebase"; // تأكد من أن ملف firebase يحتوي على الكود الخاص بـ Firestore
+import { db } from "../firebase"; 
 
 const Login = () => {
   const [users, setUsers] = useState([]);
@@ -31,7 +31,7 @@ const Login = () => {
     );
 
     if (user) {
-      navigate("/home");
+      navigate("/Quran_Compition/home");
     } else {
       setError("إيميل أو كلمة مرور غير صحيحة");
     }
@@ -100,7 +100,7 @@ const Login = () => {
         </button>
 
         <Link
-          to="/signup"
+          to="/Quran_Compition/signup"
           className="text-blue-500 hover:underline dark:text-blue-400 mt-5 mb-2 text-lg text-center"
         >
           التسجيل بحساب جديد
