@@ -30,7 +30,7 @@ const Login = () => {
     const user = users.find((user) => user.email === email && user.password === password);
 
     if (user) {
-      navigate("/home");
+      navigate("/Quran_Compition/home");
     } else {
       setError("إيميل أو كلمة مرور غير صحيحة");
     }

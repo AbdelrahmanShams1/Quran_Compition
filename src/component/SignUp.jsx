@@ -50,7 +50,7 @@ const SignUp = () => {
       },
       body: JSON.stringify(newUser)
     });
-    navigate('/')
+    navigate('/Quran_Compition')
   };
 
   return (

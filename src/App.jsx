@@ -8,9 +8,9 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
     <>
-    <Route path='/' element={<Login />} />
-    <Route path="/signup" element={<SignUp />} />
-    <Route path="/home" element={<Home />} />
+    <Route path='/Quran_Compition' element={<Login />} />
+    <Route path="/Quran_Compition/signup" element={<SignUp />} />
+    <Route path="/Quran_Compition/home" element={<Home />} />
     </>
     )
   );
