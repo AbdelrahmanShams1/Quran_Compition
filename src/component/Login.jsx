@@ -93,7 +93,7 @@ const Login = () => {
         </button>
 
         <Link
-          to="/Quran_Compition/signup"
+          to="/signup"
           className="text-blue-500 hover:underline dark:text-blue-400 mt-5 mb-2 text-lg text-center"
         >
           التسجيل بحساب جديد
