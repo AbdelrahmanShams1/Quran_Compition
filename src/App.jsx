@@ -10,7 +10,7 @@ const App = () => {
     <>
     <Route path='/Quran_Compition' element={<Login />} />
     <Route path="/signup" element={<SignUp />} />
-    <Route path="/Quran_Compition/home" element={<Home />} />
+    <Route path="/home" element={<Home />} />
     </>
     )
   );
