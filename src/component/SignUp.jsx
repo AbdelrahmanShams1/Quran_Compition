@@ -1,42 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../firebase"; 
-import { doc, getDoc, setDoc } from "firebase/firestore"; 
+import { db } from "../firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { FaStar, FaUserPlus } from "react-icons/fa";
 
 const SignUp = () => {
-  const [users, setUsers] = useState([]);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [type, setType] = useState(""); // نوع المستخدم
+  const [age, setAge] = useState("");
   const navigate = useNavigate();
-
-
 
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    const newUser = {
-      name: name,
-      email: email,
-      password: password,
-      activities: []
-    };
-
-   
+    const newUser = { name, email, password, type, age, activities: [] };
     const userRef = doc(db, "users", email);
     const userDoc = await getDoc(userRef);
 
     if (userDoc.exists()) {
-     
       alert("البريد الإلكتروني مسجل مسبقاً. يرجى استخدام بريد آخر.");
       return;
     }
 
-    
     try {
       await setDoc(userRef, newUser);
       alert("تم التسجيل بنجاح! يمكنك الآن تسجيل الدخول.");
-      navigate('/Quran_Compition');
+      navigate("/Quran_Compition");
     } catch (error) {
       console.error("Error saving user to Firestore:", error.message);
       alert("حدث خطأ أثناء التسجيل. حاول مرة أخرى.");
@@ -44,64 +35,74 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-[100vh] bg-gray-100 dark:bg-gray-900">
-      <form onSubmit={handleSignUp} className="w-[30rem] h-[26rem] flex flex-col justify-center bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6 text-center">
-          تسجيل الدخول بحساب جديد
-        </h2>
-        <div className="mb-4">
-          <label htmlFor="userFullName" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
-            الاسم كامل
-          </label>
+    <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-6">
+        <div className="flex flex-col items-center mb-6">
+          <FaStar className="text-yellow-400 w-16 h-16" />
+          <h1 className="text-2xl font-bold text-center mt-4 text-indigo-900">
+            انضم إلى مسابقة رمضان
+          </h1>
+        </div>
+        <form className="space-y-4" onSubmit={handleSignUp}>
           <input
-            type="text"
-            id="userFullName"
-            name="userFullName"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md text-right"
+            placeholder="الاسم الكامل"
+            dir="rtl"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring focus:ring-blue-400 dark:focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"
-            placeholder="ادخل الاسم كامل"
           />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="userName" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
-            اسم المستخدم
-          </label>
+
+          {/* قائمة منسدلة لاختيار النوع */}
+          <select
+            className="w-full  px-4 py-2 border border-gray-300 rounded-md text-right "
+            dir="rtl"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            required
+          >
+            <option  value="" disabled>اختر النوع</option>
+            <option value="ذكر">ذكر</option>
+            <option value="أنثى">أنثى</option>
+          </select>
+
           <input
+            type="number"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md text-right"
+            placeholder="العمر"
+            dir="rtl"
+            value={age} // إصلاح القيمة
+            onChange={(e) => setAge(e.target.value)}
+            required
+          />
+
+          <input
+            className="w-full px-4 py-2 border border-gray-300 rounded-md text-right"
             type="text"
-            id="userName"
-            name="userName"
+            placeholder="البريد الإلكتروني"
+            dir="rtl"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring focus:ring-blue-400 dark:focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"
-            placeholder="ادخل اسم المستخدم"
           />
-        </div>
-        <div className="mb-5">
-          <label htmlFor="password" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
-            الباسورد
-          </label>
           <input
+            className="w-full px-4 py-2 border border-gray-300 rounded-md text-right"
             type="password"
-            id="password"
-            name="password"
+            placeholder="كلمة المرور"
+            dir="rtl"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring focus:ring-blue-400 dark:focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"
-            placeholder="ادخل الباسورد"
           />
-        </div>
-        <button
-          type="submit"
-          aria-label="تسجيل الدخول"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 dark:focus:ring-blue-500 transition"
-        >
-          تسجيل
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md flex items-center justify-center"
+          >
+            <FaUserPlus className="ml-2 w-4 h-4" />
+            إنشاء حساب
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,8 @@
+import { FaMoon, FaSignInAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getDocs, collection } from "firebase/firestore";
-import { db } from "../firebase"; 
+import { db } from "../firebase";
 
 const Login = () => {
   const [users, setUsers] = useState([]);
@@ -25,11 +26,9 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const user = users.find(
       (user) => user.email === email && user.password === password
     );
-
     if (user) {
       navigate("/Quran_Compition/home");
     } else {
@@ -38,74 +37,47 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-[100vh] bg-gray-100 dark:bg-gray-900">
-      <form
-        method="post"
-        onSubmit={handleSubmit}
-        className="w-[30rem] h-[26rem] flex flex-col justify-center bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6"
-      >
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6 text-center">
-          تسجيل الدخول
-        </h2>
-
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-gray-700 dark:text-gray-300 font-medium mb-2"
-          >
-            البريد الإلكتروني
-          </label>
-          <input
-            type="text"
-            id="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring focus:ring-blue-400 dark:focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"
-            placeholder="ادخل البريد الإلكتروني"
-          />
+    <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-6">
+        <div className="flex flex-col items-center mb-6">
+          <FaMoon className="text-yellow-400 w-16 h-16" />
+          <h1 className="text-2xl font-bold text-center mt-4 text-indigo-900">
+            مرحباً بك في مسابقة رمضان
+          </h1>
         </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="password"
-            className="block text-gray-700 dark:text-gray-300 font-medium mb-2"
-          >
-            كلمة المرور
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring focus:ring-blue-400 dark:focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"
-            placeholder="ادخل كلمة المرور"
-          />
-        </div>
-
-        {error && (
-          <div className="text-red-500 text-center mb-4">
-            {error}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md text-right"
+              placeholder="البريد الإلكتروني"
+              dir="rtl"
+            />
           </div>
-        )}
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 dark:focus:ring-blue-500 transition"
-        >
-          تسجيل الدخول
-        </button>
-
-        <Link
-          to="/Quran_Compition/signup"
-          className="text-blue-500 hover:underline dark:text-blue-400 mt-5 mb-2 text-lg text-center"
-        >
-          التسجيل بحساب جديد
-        </Link>
-      </form>
+          <div className="space-y-2">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md text-right"
+              placeholder="كلمة المرور"
+              dir="rtl"
+            />
+          </div>
+          {error && <div className="text-red-500 text-center">{error}</div>}
+          <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md flex items-center justify-center">
+            <FaSignInAlt className="ml-2 w-4 h-4" />
+            تسجيل الدخول
+          </button>
+          <Link to="/Quran_Compition/signup" className="text-indigo-500 hover:underline text-lg text-center block">
+            التسجيل بحساب جديد
+          </Link>
+        </form>
+      </div>
     </div>
   );
 };
