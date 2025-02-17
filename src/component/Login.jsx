@@ -73,7 +73,7 @@ const Login = () => {
             <FaSignInAlt className="ml-2 w-4 h-4" />
             تسجيل الدخول
           </button>
-          <Link to="/Quran_Compition/signup" className="text-indigo-500 hover:underline text-lg text-center block">
+          <Link to="/Quran_Compition/instractions" className="text-indigo-500 hover:underline text-lg text-center block">
             التسجيل بحساب جديد
           </Link>
         </form>
