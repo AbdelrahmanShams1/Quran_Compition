@@ -76,7 +76,7 @@ const Login = () => {
           <Link to="/Quran_Compition/signup" className="text-indigo-500 hover:underline text-lg text-center block">
             التسجيل بحساب جديد
           </Link>
-          <Link to="/Quran_Compition/instractions" className="text-indigo-500 hover:underline text-lg text-center block">
+          <Link to="/Quran_Compition/instraction" className="text-indigo-500 hover:underline text-lg text-center block">
            التعليمات
           </Link>
         </form>
