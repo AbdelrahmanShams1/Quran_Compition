@@ -1,154 +1,190 @@
-import { useState, useEffect } from "react";
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
-import { db } from "../firebase"; // استيراد إعداد Firebase
+import { FaCalendar, FaMoon, FaSave, FaHistory, FaBookOpen, FaSun, FaCheckCircle, FaDollarSign, FaRunning } from 'react-icons/fa';
+
 
 const Home = () => {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState("");
-  const [azkarCount, setAzkarCount] = useState("");
-  const [prayerCount, setPrayerCount] = useState("");
-  const [date, setDate] = useState("");
-
-  useEffect(() => {
-    // جلب البيانات من Firebase
-    const fetchUsers = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        const usersData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setUsers(usersData);
-      } catch (error) {
-        console.error("Error getting documents: ", error);
-      }
-    };
-    fetchUsers();
-  }, []);
-
-  // دالة لإضافة النشاط إلى Firebase
-  const handleAddActivity = async (e) => {
-    e.preventDefault();
-
-    if (!selectedUser || !azkarCount || !prayerCount || !date) {
-      alert("يرجى ملء جميع الحقول.");
-      return;
-    }
-
-    // البحث عن المستخدم المحدد في الـ users
-    const userIndex = users.findIndex(user => user.id === selectedUser);
-
-    if (userIndex === -1) {
-      alert("المستخدم غير موجود.");
-      return;
-    }
-
-    // إضافة النشاط إلى Firebase
-    const newActivity = {
-      date,
-      azkarCount: parseInt(azkarCount),
-      prayerCount: parseInt(prayerCount),
-    };
-
-    // تحديث بيانات المستخدم في Firebase
-    const userRef = doc(db, "users", selectedUser); // استخدم doc لتحديد المستند بناءً على ID المستخدم
-
-    try {
-      // تحديث الأنشطة الموجودة بدلاً من إضافتها
-      await updateDoc(userRef, {
-        activities: [...users[userIndex].activities, newActivity],
-      });
-
-      alert("تم إضافة النشاط بنجاح!");
-    } catch (error) {
-      console.error("Error updating document: ", error);
-    }
-  };
-
+  
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center mb-8">الأنشطة</h1>
-
-      {/* نموذج إضافة النشاط */}
-      <form onSubmit={handleAddActivity} className="mb-6">
-        <div className="mb-4">
-          <label className="block text-gray-700">اختر المستخدم:</label>
-          <select
-            value={selectedUser}
-            onChange={(e) => setSelectedUser(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          >
-            <option value="">اختر مستخدم</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
-          </select>
+    <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 py-6 px-4">
+      <div className="max-w-4xl mx-auto bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-6">
+       
+        <div className="flex flex-col items-center mb-6 border-b pb-4">
+          <FaMoon className="text-yellow-400 w-12 h-12" />
+          <h1 className="text-3xl font-bold text-center mt-2 text-indigo-900">
+            تسجيل نقاط مسابقة رمضان
+          </h1>
         </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700">عدد الأذكار:</label>
-          <input
-            type="number"
-            value={azkarCount}
-            onChange={(e) => setAzkarCount(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700">عدد الصلوات:</label>
-          <input
-            type="number"
-            value={prayerCount}
-            onChange={(e) => setPrayerCount(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700">التاريخ:</label>
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded"
-        >
-          إضافة النشاط
-        </button>
-      </form>
-
-      {/* عرض الأنشطة */}
-      {users.length === 0 ? (
-        <p>لا توجد بيانات لعرضها.</p>
-      ) : (
-        users.map((user) => (
-          <div key={user.id} className="user-activities bg-white p-4 rounded-lg shadow-md mb-6">
-            <h2 className="text-2xl font-semibold text-gray-800">{user.name}</h2>
-            <p className="text-gray-600">البريد الإلكتروني: {user.email}</p>
-            <div className="activities mt-4">
-              {user.activities.length > 0 ? (
-                user.activities.map((activity, index) => (
-                  <div key={index} className="activity-item border-b py-2">
-                    <p className="font-medium text-gray-700">التاريخ: {activity.date}</p>
-                    <p className="text-gray-600">عدد الأذكار: {activity.azkarCount}</p>
-                    <p className="text-gray-600">عدد الصلوات: {activity.prayerCount}</p>
-                  </div>
-                ))
-              ) : (
-                <p>لا توجد أنشطة لعرضها.</p>
-              )}
+  
+        <div className="space-y-8" dir="rtl">
+       
+          <div className="grid  grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-gray-700 mb-2 font-bold">التاريخ:</label>
+              <input
+                type="date"
+                value="2024-02-19"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 mb-2 font-bold">الجنس:</label>
+              <div className="flex space-x-4 space-x-reverse">
+                <div className="mx-2">
+                  <input type="radio" id="male" name="gender" checked className="ml-1" />
+                  <label htmlFor="male">ذكر</label>
+                </div>
+                <div className="mx-2">
+                  <input type="radio" id="female" name="gender" className="ml-1" />
+                  <label htmlFor="female">أنثى</label>
+                </div>
+              </div>
             </div>
           </div>
-        ))
-      )}
+  
+         
+          <div className="bg-indigo-50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+              <FaCheckCircle className="ml-2" />
+              الصلوات
+            </h2>
+            
+         
+            {['الفجر', 'الظهر', 'العصر', 'المغرب', 'العشاء'].map((prayer, index) => (
+              <div key={prayer} className="mb-6 border-b pb-4 last:border-b-0">
+                <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <h3 className="text-lg font-bold text-indigo-700 mb-3 flex items-center">
+                    <span className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center ml-2 text-indigo-600">
+                      {index + 1}
+                    </span>
+                    صلاة {prayer}
+                  </h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-gray-700 mb-2">نوع الصلاة:</label>
+                      <select className="w-full px-4 py-2 border border-gray-300 rounded-md bg-white">
+                        <option>جماعة في المسجد (1000 نقطة)</option>
+                        <option>حاضر (700 نقطة)</option>
+                        <option>تأخير (300 نقطة)</option>
+                        <option>قضاء (100 نقطة)</option>
+                      </select>
+                    </div>
+                    <div className="flex items-center bg-indigo-50 p-3 rounded-md">
+                      <input type="checkbox" className="ml-2 h-5 w-5 text-indigo-600" />
+                      <label className="text-gray-700">أذكار الصلاة (50 نقطة)</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+  
+          
+          <div className="bg-green-50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-green-800 mb-4 flex items-center">
+              <FaBookOpen className="ml-2" />
+              القرآن الكريم
+            </h2>
+            <div>
+              <label className="block text-gray-700 mb-2">عدد الصفحات (30 نقطة لكل صفحة):</label>
+              <input type="number" min="0" className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+            </div>
+          </div>
+  
+      
+          <div className="bg-amber-50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-amber-800 mb-4 flex items-center">
+              <FaSun className="ml-2" />
+              صلاة الضحى
+            </h2>
+            <div>
+              <label className="block text-gray-700 mb-2">عدد الركعات (50 نقطة لكل ركعة):</label>
+              <input type="number" min="0" max="8" className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+            </div>
+          </div>
+  
+        
+          <div className="bg-indigo-50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+              <FaMoon className="ml-2" />
+              صلاة التراويح
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-700 mb-2">مكان الصلاة:</label>
+                <select className="w-full px-4 py-2 border border-gray-300 rounded-md">
+                  <option>في المسجد (60 نقطة لكل ركعة)</option>
+                  <option>في البيت (50 نقطة لكل ركعة)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-gray-700 mb-2">عدد الركعات:</label>
+                <input type="number" min="0" max="20" className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+              </div>
+              <div className="flex items-center">
+                <input type="checkbox" className="ml-2 h-5 w-5" />
+                <label className="text-gray-700">صلاة الوتر (80 نقطة)</label>
+              </div>
+            </div>
+          </div>
+  
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-blue-800 mb-4 flex items-center">
+              <FaCalendar className="ml-2" />
+              أنشطة إضافية
+            </h2>
+            <div className="space-y-4">
+              <div className="flex items-center">
+                <input type="checkbox" className="ml-2 h-5 w-5" />
+                <label className="text-gray-700">السؤال اليومي (300 نقطة)</label>
+              </div>
+              
+              <div className="flex items-center">
+                <input type="checkbox" className="ml-2 h-5 w-5" />
+                <label className="text-gray-700">تقييم الشيخ الأسبوعي (100 نقطة)</label>
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 mb-2">عدد الأشخاص الذين تم إفطارهم (100 نقطة لكل شخص):</label>
+                <input type="number" min="0" className="w-full px-4 py-2 border border-gray-300 rounded-md" />
+                <span className="text-sm text-red-500 block mt-1">* من غير الأسرة الرئيسية </span>
+              </div>
+              
+              <div className="flex items-center">
+                <input type="checkbox" className="ml-2 h-5 w-5" />
+                <label className="text-gray-700">عيادة مريض (200 نقطة)</label>
+                <span className="text-sm text-red-500 block mr-6">* من غير الأسرة الرئيسية </span>
+              </div>
+              
+              <div className="flex items-center">
+                <input type="checkbox" className="ml-2 h-5 w-5" />
+                <label className="text-gray-700">تصدقت اليوم (100 نقطة)</label>
+              </div>
+              
+              <div className="flex items-center">
+                <input type="checkbox" className="ml-2 h-5 w-5" />
+                <label className="text-gray-700">شهادة جنازة (200 نقطة)</label>
+              </div>
+              
+              <div className="flex items-center">
+                <input type="checkbox" className="ml-2 h-5 w-5" />
+                <label className="text-gray-700">الدعاء بظهر الغيب بالخير (200 نقطة)</label>
+                <span className="text-sm text-gray-500 block mr-6">* ادعُ للقائمين على التطبيق بالزواج العاجل بست الكل الزوجة الصالحة 💍</span>
+              </div>
+            </div>
+          </div>
+  
+          <div className="mt-8 bg-gray-50 p-4 rounded-lg">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold text-gray-800">مجموع النقاط اليومي:</h2>
+              <span className="text-2xl font-bold text-indigo-600">2150</span>
+            </div>
+            
+            <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-6 rounded-md font-bold text-lg flex items-center justify-center">
+              <FaSave className="ml-2" />
+              حفظ النقاط
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

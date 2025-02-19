@@ -11,6 +11,7 @@ import Instructions from "./component/Instructions";
 import Welcome from "./component/welcome";
 import Standing from "./component/Standing";
 
+
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="Quran_Compition/instraction" element={<Instructions />} />
         <Route path="Quran_Compition" element={<Welcome />} />
         <Route path="Quran_Compition/standing" element={<Standing/>} />
+       
       </>
     )
   );
