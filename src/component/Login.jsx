@@ -52,7 +52,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md text-right"
+              className="outline-none w-full px-4 py-2 border border-gray-300 rounded-md text-right"
               placeholder="البريد الإلكتروني"
               dir="rtl"
             />
@@ -63,21 +63,30 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md text-right"
+              className="outline-none w-full px-4 py-2 border border-gray-300 rounded-md text-right"
               placeholder="كلمة المرور"
               dir="rtl"
             />
           </div>
           {error && <div className="text-red-500 text-center">{error}</div>}
-          <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md flex items-center justify-center">
+          <button
+            type="submit"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md flex items-center justify-center"
+          >
             <FaSignInAlt className="ml-2 w-4 h-4" />
             تسجيل الدخول
           </button>
-          <Link to="/Quran_Compition/signup" className="text-indigo-500 hover:underline text-lg text-center block">
+          <Link
+            to="/Quran_Compition/signup"
+            className="text-indigo-500 hover:underline text-lg text-center block"
+          >
             التسجيل بحساب جديد
           </Link>
-          <Link to="/Quran_Compition/instraction" className="text-indigo-500 hover:underline text-lg text-center block">
-           التعليمات
+          <Link
+            to="/Quran_Compition/instraction"
+            className="text-indigo-500 hover:underline text-lg text-center block"
+          >
+            التعليمات
           </Link>
         </form>
       </div>
