@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaTrophy } from 'react-icons/fa';
 import { FaCrown } from "react-icons/fa"; // استيراد التاج من FontAwesome
 
