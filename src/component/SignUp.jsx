@@ -20,7 +20,7 @@ const SignUp = () => {
       setError({ message: "كلمة المرور يجب أن تحتوي على 6 أحرف على الأقل." });
       return;
     }
-    const newUser = { name, email, password, type, age };
+    const newUser = { name, email, password, type, age, activities: [] };
     const userRef = doc(db, "users", email);
     const userDoc = await getDoc(userRef);
 

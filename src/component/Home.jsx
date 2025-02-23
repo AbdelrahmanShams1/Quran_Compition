@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { db } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
 const Home = () => {
   const fajrRef = useRef();
@@ -39,7 +39,7 @@ const Home = () => {
   const funeralRef = useRef();
   const prayForRef = useRef();
   const [userGender, setUserGender] = useState("");
-
+  const [userEmail,setUserEmail] =useState("")
   const [activitiesPoints, setActivitiesPoints] = useState({
     data: {
       date: "",
@@ -75,11 +75,13 @@ const Home = () => {
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUserGender(parsedUser.type);
+      setUserEmail(parsedUser.email);
+    
     }
   }, []);
 
   async function handleSaveData() {
-    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+   
     const todayDate = new Date().toISOString();
     const data = {
       date: todayDate,
@@ -173,10 +175,14 @@ const Home = () => {
       data.tahajjud.points +
       data.adhkar.points;
 
-    setActivitiesPoints({ data });
+    
     console.log(data);
     try {
-      await setDoc(doc(db, "users", user.email, "activities", todayDate), data);
+      setActivitiesPoints({ data });
+      const userRef = doc(db, "users", userEmail);
+      await updateDoc(userRef, {
+        activities: arrayUnion(data), 
+      });
       console.log("تم حفظ البيانات بنجاح في Firestore");
     } catch (error) {
       console.error("خطأ في حفظ البيانات:", error);
