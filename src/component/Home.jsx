@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef , useEffect } from "react";
 import {
   FaCalendar,
   FaMoon,
@@ -7,6 +7,7 @@ import {
   FaSun,
   FaCheckCircle,
   FaInfoCircle,
+  FaBolt,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -27,6 +28,10 @@ const Home = () => {
   const taraweehRakaatRef = useRef();
   const taraweehPlaceRef = useRef();
   const witrRef = useRef();
+  const tahagodRed=useRef();
+  const morningAdhkarRef=useRef();
+  const eveningAdhkarRef=useRef();
+  const generalAdhkarRef=useRef();
   const questionRef = useRef();
   const sheikhRef = useRef();
   const iftarRef = useRef();
@@ -34,80 +39,137 @@ const Home = () => {
   const charityRef = useRef();
   const funeralRef = useRef();
   const prayForRef = useRef();
+  const [userGender, setUserGender] = useState("");
 
   const [activitiesPoints, setActivitiesPoints] = useState({
     data: {
       date: "",
-      fajr: 0,
-      dhuhr: 0,
-      asr: 0,
-      maghrib: 0,
-      isha: 0,
-      quran: 0,
-      duha: 0,
-      taraweeh: 0,
+      fajr: { type: "", azkar: false, points: 0 },
+      dhuhr: { type: "", azkar: false, points: 0 },
+      asr: { type: "", azkar: false, points: 0 },
+      maghrib: { type: "", azkar: false, points: 0 },
+      isha: { type: "", azkar: false, points: 0 },
+      quran: { numOfPages: 0, points: 0 },
+      duha: { numOfPray: 0, points: 0 },
+      taraweeh: { type: "", numOfPray: 0, witr: false, points: 0 },
+      tahajjud: { numOfPray: 0, points: 0 },
+      adhkar: { 
+        morning: false, 
+        evening: false, 
+        general: 0, 
+        points: 0 
+      }, // تمت إضافة الأذكار
       extra: {
-        question: 0,
-        sheikh: 0,
+        question: false,
+        sheikh: false,
         iftar: 0,
-        visitPatient: 0,
-        charity: 0,
-        funeral: 0,
-        prayFor: 0,
+        visitPatient: false,
+        charity: false,
+        funeral: false,
+        prayFor: false,
+        points: 0,
       },
       totalPoints: 0,
     },
   });
+  
+  useEffect(() => {
+    const storedUser = localStorage.getItem("loggedInUser");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUserGender(parsedUser.type); 
+    }
+  }, []);
+  
   function handleSaveData() {
+    const todayDate = new Date().toISOString();
     const data = {
-      date: dateRef.current.value,
-      fajr: +fajrRef.current.value + (fajrAzkarRef.current.checked ? 50 : 0),
-      dhuhr: +dhuhrRef.current.value + (dhuhrAzkarRef.current.checked ? 50 : 0),
-      asr: +asrRef.current.value + (asrAzkarRef.current.checked ? 50 : 0),
-      maghrib:
-        +maghribRef.current.value + (maghribAzkarRef.current.checked ? 50 : 0),
-      isha: +ishaRef.current.value + (ishaAzkarRef.current.checked ? 50 : 0),
-
-      quran: +quranRef.current.value * 30,
-
-      duha: +duhaRef.current.value * 50,
-
-      taraweeh:
-        +taraweehPlaceRef.current.value * +taraweehRakaatRef.current.value +
-        (witrRef.current.checked ? 80 : 0),
-
+      date: todayDate,
+      fajr: {
+        type: fajrRef.current.value,
+        azkar: fajrAzkarRef.current.checked,
+        points: +fajrRef.current.value + (fajrAzkarRef.current.checked ? 50 : 0),
+      },
+      dhuhr: {
+        type: dhuhrRef.current.value,
+        azkar: dhuhrAzkarRef.current.checked,
+        points: +dhuhrRef.current.value + (dhuhrAzkarRef.current.checked ? 50 : 0),
+      },
+      asr: {
+        type: asrRef.current.value,
+        azkar: asrAzkarRef.current.checked,
+        points: +asrRef.current.value + (asrAzkarRef.current.checked ? 50 : 0),
+      },
+      maghrib: {
+        type: maghribRef.current.value,
+        azkar: maghribAzkarRef.current.checked,
+        points: +maghribRef.current.value + (maghribAzkarRef.current.checked ? 50 : 0),
+      },
+      isha: {
+        type: ishaRef.current.value,
+        azkar: ishaAzkarRef.current.checked,
+        points: +ishaRef.current.value + (ishaAzkarRef.current.checked ? 50 : 0),
+      },
+      quran: {
+        numOfPages: +quranRef.current.value,
+        points: +quranRef.current.value * 30,
+      },
+      duha: {
+        numOfPray: +duhaRef.current.value,
+        points: +duhaRef.current.value * 50,
+      },
+      taraweeh: {
+        type: taraweehPlaceRef.current.value,
+        numOfPray: +taraweehRakaatRef.current.value,
+        witr: witrRef.current.checked,
+        points: (+taraweehRakaatRef.current.value * (taraweehPlaceRef.current.value ? +taraweehPlaceRef.current.value : 0)) +
+          (witrRef.current.checked ? 80 : 0),
+      },
+      tahajjud: {
+        numOfPray: +tahagodRed.current.value,
+        points: +tahagodRed.current.value * 70,
+      },
+      adhkar: {
+        morning: morningAdhkarRef.current.checked,
+        evening: eveningAdhkarRef.current.checked,
+        general: +generalAdhkarRef.current.value,
+        points: 
+          (morningAdhkarRef.current.checked ? 200 : 0) +
+          (eveningAdhkarRef.current.checked ? 200 : 0) +
+          (+generalAdhkarRef.current.value / 1000) * 200,
+      },
       extra: {
-        question: questionRef.current.checked ? 300 : 0,
-
-        sheikh: sheikhRef.current.checked ? 100 : 0,
-
-        iftar: +iftarRef.current.value * 100,
-
-        visitPatient: visitPatientRef.current.checked ? 200 : 0,
-
-        charity: charityRef.current.checked ? 100 : 0,
-
-        funeral: funeralRef.current.checked ? 200 : 0,
-
-        prayFor: prayForRef.current.checked ? 200 : 0,
+        question: questionRef.current.checked,
+        sheikh: sheikhRef.current.checked,
+        iftar: +iftarRef.current.value,
+        visitPatient: visitPatientRef.current.checked,
+        charity: charityRef.current.checked,
+        funeral: funeralRef.current.checked,
+        prayFor: prayForRef.current.checked,
+        points: (questionRef.current.checked ? 300 : 0) +
+          (sheikhRef.current.checked ? 100 : 0) +
+          (+iftarRef.current.value * 100) +
+          (visitPatientRef.current.checked ? 200 : 0) +
+          (charityRef.current.checked ? 100 : 0) +
+          (funeralRef.current.checked ? 200 : 0) +
+          (prayForRef.current.checked ? 200 : 0),
       },
     };
+    
+    
     data.totalPoints =
-      data.fajr +
-      data.dhuhr +
-      data.asr +
-      data.maghrib +
-      data.isha +
-      data.quran +
-      data.duha +
-      data.taraweeh +
-      data.extra.question +
-      data.extra.sheikh +
-      data.extra.iftar +
-      data.extra.visitPatient +
-      data.extra.charity +
-      data.extra.funeral +
-      data.extra.prayFor;
+      data.fajr.points +
+      data.dhuhr.points +
+      data.asr.points +
+      data.maghrib.points +
+      data.isha.points +
+      data.quran.points +
+      data.duha.points +
+      data.taraweeh.points +
+      data.extra.points +
+       data.tahajjud.points +
+       data.adhkar.points;
+    
     setActivitiesPoints({ data });
     console.log(data);
   }
@@ -140,54 +202,16 @@ const Home = () => {
         </div>
 
         <div className="space-y-8" dir="rtl">
-          <div>
-            <Link
-              to={"/Quran_Compition/instraction"}
-              className="col-span-2 text-center bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white py-3 px-2 rounded-md font-bold text-lg flex items-center justify-center"
-            >
-              <FaInfoCircle className="ml-2" />
-              التعليمات والشروط
-            </Link>
-          </div>
-          <div className="grid  grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-gray-700 mb-2 font-bold">
-                التاريخ:
-              </label>
-              <input
-                ref={dateRef}
-                type="date"
-                // value="2024-02-19"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 mb-2 font-bold">
-                الجنس:
-              </label>
-              <div className="flex space-x-4 space-x-reverse">
-                <div className="mx-2">
-                  <input
-                    type="radio"
-                    id="male"
-                    name="gender"
-                    // checked
-                    className="ml-1 outline-none "
-                  />
-                  <label htmlFor="male">ذكر</label>
-                </div>
-                <div className="mx-2">
-                  <input
-                    type="radio"
-                    id="female"
-                    name="gender"
-                    className="ml-1 outline-none "
-                  />
-                  <label htmlFor="female">أنثى</label>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div>
+  <Link
+    to={"/Quran_Compition/instraction"}
+    className="col-span-2 text-center bg-gradient-to-b from-purple-600 to-indigo-900 hover:from-purple-700 hover:to-indigo-800 text-white py-3 px-2 rounded-md font-bold text-lg flex items-center justify-center"
+  >
+    <FaInfoCircle className="ml-2" />
+    التعليمات والشروط
+  </Link>
+</div>
+        
 
           <div className="bg-indigo-50 p-4 rounded-lg">
             <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
@@ -212,17 +236,30 @@ const Home = () => {
                       <label className="block text-gray-700 mb-2">
                         نوع الصلاة:
                       </label>
-                      <select
-                        className=" outline-none w-full px-4 py-2 border border-gray-300 rounded-md bg-white"
-                        ref={prayer.salahRef}
-                      >
-                        <option value={1000}>
-                          جماعة في المسجد (1000 نقطة)
-                        </option>
-                        <option value={700}>حاضر (700 نقطة)</option>
-                        <option value={300}>تأخير (300 نقطة)</option>
-                        <option value={100}>قضاء (100 نقطة)</option>
-                      </select>
+                      {userGender === "male" ? (
+  <select
+    ref={prayer.salahRef}
+    className="w-full px-4 py-2 border border-gray-300 rounded-md"
+  >
+    <option value={1000}>جماعة في المسجد (1000 نقطة)</option>
+    <option value={700}>حاضر (700 نقطة)</option>
+    <option value={300}>تأخير (300 نقطة)</option>
+    <option value={100}>قضاء (100 نقطة)</option>
+  </select>
+) : (
+  <select
+    ref={prayer.salahRef}
+    className="w-full px-4 py-2 border border-gray-300 rounded-md"
+  >
+    <option value={900}>في الوقت (900 نقطة)</option>
+    <option value={300}>متأخر (300 نقطة)</option>
+    <option value={100}>قضاء (100 نقطة)</option>
+    <option value={900}>عذر قهري (900 نقطة)</option>
+    <option value={1000}>جماعة (بونص) (1000 نقطة)</option>
+  </select>
+)}
+
+                      
                     </div>
                     <div className="flex items-center bg-indigo-50 p-3 rounded-md">
                       <input
@@ -299,7 +336,7 @@ const Home = () => {
                   ref={taraweehRakaatRef}
                   type="number"
                   min="0"
-                  max="20"
+                 
                   className=" outline-none w-full px-4 py-2 border border-gray-300 rounded-md"
                 />
               </div>
@@ -310,6 +347,64 @@ const Home = () => {
                   ref={witrRef}
                 />
                 <label className="text-gray-700">صلاة الوتر (80 نقطة)</label>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-purple-50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-purple-800 mb-4 flex items-center">
+              <FaMoon className="ml-2" />
+              صلاة التهجد
+            </h2>
+            <div>
+              <label className="block text-gray-700 mb-2">عدد الركعات (70 نقطة لكل ركعة):</label>
+              <input
+                type="number"
+                min="0"
+               
+               ref={tahagodRed}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md"
+              />
+            </div>
+          </div>
+
+          <div className="bg-teal-50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-teal-800 mb-4 flex items-center">
+              <FaBolt className="ml-2" />
+              الأذكار
+            </h2>
+            <div className="space-y-4">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="morningAdhkar"
+                     ref={morningAdhkarRef}
+                  className="ml-2 h-5 w-5"
+                />
+                <label htmlFor="morningAdhkar" className="text-gray-700">أذكار الصباح (200 نقطة)</label>
+              </div>
+              
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="eveningAdhkar"
+                  ref={eveningAdhkarRef}
+                  className="ml-2 h-5 w-5"
+                />
+                <label htmlFor="eveningAdhkar" className="text-gray-700">أذكار المساء (200 نقطة)</label>
+              </div>
+              
+              
+              
+              <div>
+                <label className="block text-gray-700 mb-2">عدد مرات الذكر العام (200 نقطة لكل 1000 مرة):</label>
+                <input
+                  type="number"
+                  min="0"
+                  step="100"
+                  ref={generalAdhkarRef}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                />
               </div>
             </div>
           </div>

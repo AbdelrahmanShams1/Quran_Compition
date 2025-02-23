@@ -28,12 +28,7 @@ export default function Welcome() {
           سجل الدخول 🚪
         </Link>
       </div>
-      <Link
-        to={"/Quran_Compition/instraction"}
-        className="mt-3 text-sm sm:text-lg text-amber-400 hover:text-amber-500 hover:underline transition"
-      >
-        التعرف علي تعليمات المسابقة
-      </Link>
+     
     </div>
   );
 }

@@ -30,6 +30,7 @@ const Login = () => {
       (user) => user.email === email && user.password === password
     );
     if (user) {
+localStorage.setItem("loggedInUser", JSON.stringify(user));
       navigate("/Quran_Compition/home");
     } else {
       setError("إيميل أو كلمة مرور غير صحيحة");
@@ -82,12 +83,7 @@ const Login = () => {
           >
             التسجيل بحساب جديد
           </Link>
-          <Link
-            to="/Quran_Compition/instraction"
-            className="text-indigo-500 hover:underline text-lg text-center block"
-          >
-            التعليمات
-          </Link>
+         
         </form>
       </div>
     </div>

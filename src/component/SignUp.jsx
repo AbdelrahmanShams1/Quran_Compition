@@ -8,7 +8,7 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [type, setType] = useState(""); // نوع المستخدم
+  const [type, setType] = useState(""); 
   const [age, setAge] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -61,7 +61,7 @@ const SignUp = () => {
             required
           />
 
-          {/* قائمة منسدلة لاختيار النوع */}
+       
           <select
             className="outline-none w-full  px-4 py-2 border border-gray-300 rounded-md text-right "
             dir="rtl"
@@ -70,8 +70,8 @@ const SignUp = () => {
             required
           >
             <option  value="" disabled>اختر النوع</option>
-            <option value="ذكر">ذكر</option>
-            <option value="أنثى">أنثى</option>
+            <option value="male">ذكر</option>
+            <option value="female">أنثى</option>
           </select>
 
           <input
@@ -86,7 +86,7 @@ const SignUp = () => {
 
           <input
             className="outline-none w-full px-4 py-2 border border-gray-300 rounded-md text-right"
-            type="email"
+            type="text"
             placeholder="البريد الإلكتروني"
             dir="rtl"
             value={email}

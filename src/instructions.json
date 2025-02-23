@@ -1,0 +1,98 @@
+[
+    {
+        "key": "prayer",
+        "name": "الصلاة",
+        "categories": [
+            {
+                "key": "male",
+                "name": "الشاب",
+                "types": [
+                    { "key": "mosque", "name": "جماعة في المسجد", "points": 1000 },
+                    { "key": "onTime", "name": "حاضر", "points": 700 },
+                    { "key": "late", "name": "تأخير", "points": 300 },
+                    { "key": "qadaa", "name": "قضاء", "points": 100 }
+                ]
+            },
+            {
+                "key": "female",
+                "name": "الفتاة",
+                "types": [
+                    { "key": "onTime", "name": "في الوقت", "points": 900 },
+                    { "key": "late", "name": "متأخر", "points": 300 },
+                    { "key": "qadaa", "name": "قضاء", "points": 100 },
+                    { "key": "excuse", "name": "عذر قهري", "points": 900 },
+                    { "key": "mosqueBonus", "name": "جماعة (بونص)", "points": 1000 }
+                ]
+            }
+        ]
+    },
+    {
+        "key": "sunnah",
+        "name": "السنن الرواتب",
+        "details": [
+            { "key": "rakaa", "name": " للركعة الواحده ", "points": 50, "totalRakaat": 12 }
+        ]
+    },
+    {
+        "key": "quran",
+        "name": "القرآن",
+        "details": [
+            { "key": "page", "name": "للصفحة الواحده", "points": 30 }
+        ]
+    },
+    {
+        "key": "duha",
+        "name": "الضحى",
+        "details": [
+            { "key": "rakaa","name": " للركعة الواحده ", "points": 50 }
+        ]
+    },
+    {
+        "key": "taraweeh",
+        "name": "التراويح",
+        "details": [
+            { "key": "rakaa", "name": " للركعة الواحده ", "points": 50 },
+            { "key": "witr", "name": "الوتر", "points": 80 },
+            { "key": "mosque", "name": "في المسجد", "points": 60 },
+            { "key": "home", "name": "في البيت", "points": 50 }
+        ]
+    },
+    {
+        "key": "qiyam",
+        "name": "التهجد",
+        "details": [
+            { "key": "rakaa", "name": " للركعة الواحده ", "points": 70 }
+        ]
+    },
+    {
+        "key": "azkar",
+        "name": "الأذكار",
+        "details": [
+            { "key": "morningEvening", "name": "الصباح والمساء", "points": 200 },
+            { "key": "prayerAzkar", "name": "أذكار الصلاة (بونص)", "points": 50 },
+            { "key": "generalAzkar", "name": "الذكر العام الألف", "points": 200 }
+        ]
+    },
+    {
+        "key": "extra",
+        "name": "أعمال إضافية",
+        "details": [
+            { "key": "question", "name": "السؤال اليومي", "points": 300 },
+            { "key": "sheikh", "name": "تقييم الشيخ أسبوعيًا", "points": 100 },
+            { "key": "iftar", "name": "إفطار صائم", "points": 100 },
+            { "key": "visitPatient", "name": "عيادة مريض", "points": 200 },
+            { "key": "charity", "name": "الصدقة", "points": 100 },
+            { "key": "funeral", "name": "شهادة جنازة", "points": 200 },
+            { "key": "prayFor", "name": "الدعاء بظهر الغيب بالخير", "points": 200 }
+        ]
+    },
+    {
+        "key": "rules",
+        "name": "القواعد العامة",
+        "details": [
+            { "key": "rule2", "name": "لا يمكن تعديل النقاط بعد تأكيد الصلاة" },
+            { "key": "rule3", "name": "يتم تحديث قائمة المتصدرين يومياً" },
+            { "key": "rule4", "name": "يجب الصدق في تسجيل المعلومات" }
+        ]
+    }
+]
