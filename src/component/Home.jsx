@@ -1,4 +1,4 @@
-import { useState, useRef , useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   FaCalendar,
   FaMoon,
@@ -10,9 +10,10 @@ import {
   FaBolt,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { db } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 const Home = () => {
-  const dateRef = useRef();
   const fajrRef = useRef();
   const fajrAzkarRef = useRef();
   const dhuhrRef = useRef();
@@ -28,12 +29,10 @@ const Home = () => {
   const taraweehRakaatRef = useRef();
   const taraweehPlaceRef = useRef();
   const witrRef = useRef();
-  const tahagodRed=useRef();
-  const morningAdhkarRef=useRef();
-  const eveningAdhkarRef=useRef();
-  const generalAdhkarRef=useRef();
-  const questionRef = useRef();
-  const sheikhRef = useRef();
+  const tahagodRed = useRef();
+  const morningAdhkarRef = useRef();
+  const eveningAdhkarRef = useRef();
+  const generalAdhkarRef = useRef();
   const iftarRef = useRef();
   const visitPatientRef = useRef();
   const charityRef = useRef();
@@ -53,15 +52,13 @@ const Home = () => {
       duha: { numOfPray: 0, points: 0 },
       taraweeh: { type: "", numOfPray: 0, witr: false, points: 0 },
       tahajjud: { numOfPray: 0, points: 0 },
-      adhkar: { 
-        morning: false, 
-        evening: false, 
-        general: 0, 
-        points: 0 
+      adhkar: {
+        morning: false,
+        evening: false,
+        general: 0,
+        points: 0,
       }, // تمت إضافة الأذكار
       extra: {
-        question: false,
-        sheikh: false,
         iftar: 0,
         visitPatient: false,
         charity: false,
@@ -72,28 +69,31 @@ const Home = () => {
       totalPoints: 0,
     },
   });
-  
+
   useEffect(() => {
     const storedUser = localStorage.getItem("loggedInUser");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
-      setUserGender(parsedUser.type); 
+      setUserGender(parsedUser.type);
     }
   }, []);
-  
-  function handleSaveData() {
+
+  async function handleSaveData() {
+    const user = JSON.parse(localStorage.getItem("loggedInUser"));
     const todayDate = new Date().toISOString();
     const data = {
       date: todayDate,
       fajr: {
         type: fajrRef.current.value,
         azkar: fajrAzkarRef.current.checked,
-        points: +fajrRef.current.value + (fajrAzkarRef.current.checked ? 50 : 0),
+        points:
+          +fajrRef.current.value + (fajrAzkarRef.current.checked ? 50 : 0),
       },
       dhuhr: {
         type: dhuhrRef.current.value,
         azkar: dhuhrAzkarRef.current.checked,
-        points: +dhuhrRef.current.value + (dhuhrAzkarRef.current.checked ? 50 : 0),
+        points:
+          +dhuhrRef.current.value + (dhuhrAzkarRef.current.checked ? 50 : 0),
       },
       asr: {
         type: asrRef.current.value,
@@ -103,12 +103,15 @@ const Home = () => {
       maghrib: {
         type: maghribRef.current.value,
         azkar: maghribAzkarRef.current.checked,
-        points: +maghribRef.current.value + (maghribAzkarRef.current.checked ? 50 : 0),
+        points:
+          +maghribRef.current.value +
+          (maghribAzkarRef.current.checked ? 50 : 0),
       },
       isha: {
         type: ishaRef.current.value,
         azkar: ishaAzkarRef.current.checked,
-        points: +ishaRef.current.value + (ishaAzkarRef.current.checked ? 50 : 0),
+        points:
+          +ishaRef.current.value + (ishaAzkarRef.current.checked ? 50 : 0),
       },
       quran: {
         numOfPages: +quranRef.current.value,
@@ -122,7 +125,11 @@ const Home = () => {
         type: taraweehPlaceRef.current.value,
         numOfPray: +taraweehRakaatRef.current.value,
         witr: witrRef.current.checked,
-        points: (+taraweehRakaatRef.current.value * (taraweehPlaceRef.current.value ? +taraweehPlaceRef.current.value : 0)) +
+        points:
+          +taraweehRakaatRef.current.value *
+            (taraweehPlaceRef.current.value
+              ? +taraweehPlaceRef.current.value
+              : 0) +
           (witrRef.current.checked ? 80 : 0),
       },
       tahajjud: {
@@ -133,30 +140,26 @@ const Home = () => {
         morning: morningAdhkarRef.current.checked,
         evening: eveningAdhkarRef.current.checked,
         general: +generalAdhkarRef.current.value,
-        points: 
+        points:
           (morningAdhkarRef.current.checked ? 200 : 0) +
           (eveningAdhkarRef.current.checked ? 200 : 0) +
           (+generalAdhkarRef.current.value / 1000) * 200,
       },
       extra: {
-        question: questionRef.current.checked,
-        sheikh: sheikhRef.current.checked,
         iftar: +iftarRef.current.value,
         visitPatient: visitPatientRef.current.checked,
         charity: charityRef.current.checked,
         funeral: funeralRef.current.checked,
         prayFor: prayForRef.current.checked,
-        points: (questionRef.current.checked ? 300 : 0) +
-          (sheikhRef.current.checked ? 100 : 0) +
-          (+iftarRef.current.value * 100) +
+        points:
+          +iftarRef.current.value * 100 +
           (visitPatientRef.current.checked ? 200 : 0) +
           (charityRef.current.checked ? 100 : 0) +
           (funeralRef.current.checked ? 200 : 0) +
           (prayForRef.current.checked ? 200 : 0),
       },
     };
-    
-    
+
     data.totalPoints =
       data.fajr.points +
       data.dhuhr.points +
@@ -167,11 +170,17 @@ const Home = () => {
       data.duha.points +
       data.taraweeh.points +
       data.extra.points +
-       data.tahajjud.points +
-       data.adhkar.points;
-    
+      data.tahajjud.points +
+      data.adhkar.points;
+
     setActivitiesPoints({ data });
     console.log(data);
+    try {
+      await setDoc(doc(db, "users", user.email, "activities", todayDate), data);
+      console.log("تم حفظ البيانات بنجاح في Firestore");
+    } catch (error) {
+      console.error("خطأ في حفظ البيانات:", error);
+    }
   }
   const prayers = [
     { id: "fajr", value: "الفجر", salahRef: fajrRef, azkarRef: fajrAzkarRef },
@@ -202,16 +211,15 @@ const Home = () => {
         </div>
 
         <div className="space-y-8" dir="rtl">
-        <div>
-  <Link
-    to={"/Quran_Compition/instraction"}
-    className="col-span-2 text-center bg-gradient-to-b from-purple-600 to-indigo-900 hover:from-purple-700 hover:to-indigo-800 text-white py-3 px-2 rounded-md font-bold text-lg flex items-center justify-center"
-  >
-    <FaInfoCircle className="ml-2" />
-    التعليمات والشروط
-  </Link>
-</div>
-        
+          <div>
+            <Link
+              to={"/Quran_Compition/instraction"}
+              className="col-span-2 text-center bg-gradient-to-b from-purple-600 to-indigo-900 hover:from-purple-700 hover:to-indigo-800 text-white py-3 px-2 rounded-md font-bold text-lg flex items-center justify-center"
+            >
+              <FaInfoCircle className="ml-2" />
+              التعليمات والشروط
+            </Link>
+          </div>
 
           <div className="bg-indigo-50 p-4 rounded-lg">
             <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
@@ -237,29 +245,29 @@ const Home = () => {
                         نوع الصلاة:
                       </label>
                       {userGender === "male" ? (
-  <select
-    ref={prayer.salahRef}
-    className="w-full px-4 py-2 border border-gray-300 rounded-md"
-  >
-    <option value={1000}>جماعة في المسجد (1000 نقطة)</option>
-    <option value={700}>حاضر (700 نقطة)</option>
-    <option value={300}>تأخير (300 نقطة)</option>
-    <option value={100}>قضاء (100 نقطة)</option>
-  </select>
-) : (
-  <select
-    ref={prayer.salahRef}
-    className="w-full px-4 py-2 border border-gray-300 rounded-md"
-  >
-    <option value={900}>في الوقت (900 نقطة)</option>
-    <option value={300}>متأخر (300 نقطة)</option>
-    <option value={100}>قضاء (100 نقطة)</option>
-    <option value={900}>عذر قهري (900 نقطة)</option>
-    <option value={1000}>جماعة (بونص) (1000 نقطة)</option>
-  </select>
-)}
-
-                      
+                        <select
+                          ref={prayer.salahRef}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                        >
+                          <option value={1000}>
+                            جماعة في المسجد (1000 نقطة)
+                          </option>
+                          <option value={700}>حاضر (700 نقطة)</option>
+                          <option value={300}>تأخير (300 نقطة)</option>
+                          <option value={100}>قضاء (100 نقطة)</option>
+                        </select>
+                      ) : (
+                        <select
+                          ref={prayer.salahRef}
+                          className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                        >
+                          <option value={900}>في الوقت (900 نقطة)</option>
+                          <option value={300}>متأخر (300 نقطة)</option>
+                          <option value={100}>قضاء (100 نقطة)</option>
+                          <option value={900}>عذر قهري (900 نقطة)</option>
+                          <option value={1000}>جماعة (بونص) (1000 نقطة)</option>
+                        </select>
+                      )}
                     </div>
                     <div className="flex items-center bg-indigo-50 p-3 rounded-md">
                       <input
@@ -336,7 +344,6 @@ const Home = () => {
                   ref={taraweehRakaatRef}
                   type="number"
                   min="0"
-                 
                   className=" outline-none w-full px-4 py-2 border border-gray-300 rounded-md"
                 />
               </div>
@@ -357,12 +364,13 @@ const Home = () => {
               صلاة التهجد
             </h2>
             <div>
-              <label className="block text-gray-700 mb-2">عدد الركعات (70 نقطة لكل ركعة):</label>
+              <label className="block text-gray-700 mb-2">
+                عدد الركعات (70 نقطة لكل ركعة):
+              </label>
               <input
                 type="number"
                 min="0"
-               
-               ref={tahagodRed}
+                ref={tahagodRed}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md"
               />
             </div>
@@ -378,12 +386,14 @@ const Home = () => {
                 <input
                   type="checkbox"
                   id="morningAdhkar"
-                     ref={morningAdhkarRef}
+                  ref={morningAdhkarRef}
                   className="ml-2 h-5 w-5"
                 />
-                <label htmlFor="morningAdhkar" className="text-gray-700">أذكار الصباح (200 نقطة)</label>
+                <label htmlFor="morningAdhkar" className="text-gray-700">
+                  أذكار الصباح (200 نقطة)
+                </label>
               </div>
-              
+
               <div className="flex items-center">
                 <input
                   type="checkbox"
@@ -391,13 +401,15 @@ const Home = () => {
                   ref={eveningAdhkarRef}
                   className="ml-2 h-5 w-5"
                 />
-                <label htmlFor="eveningAdhkar" className="text-gray-700">أذكار المساء (200 نقطة)</label>
+                <label htmlFor="eveningAdhkar" className="text-gray-700">
+                  أذكار المساء (200 نقطة)
+                </label>
               </div>
-              
-              
-              
+
               <div>
-                <label className="block text-gray-700 mb-2">عدد مرات الذكر العام (200 نقطة لكل 1000 مرة):</label>
+                <label className="block text-gray-700 mb-2">
+                  عدد مرات الذكر العام (200 نقطة لكل 1000 مرة):
+                </label>
                 <input
                   type="number"
                   min="0"
@@ -415,28 +427,6 @@ const Home = () => {
               أنشطة إضافية
             </h2>
             <div className="space-y-4">
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="ml-2 h-5 w-5 outline-none "
-                  ref={questionRef}
-                />
-                <label className="text-gray-700">
-                  السؤال اليومي (300 نقطة)
-                </label>
-              </div>
-
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="ml-2 h-5 w-5 outline-none "
-                  ref={sheikhRef}
-                />
-                <label className="text-gray-700">
-                  تقييم الشيخ الأسبوعي (100 نقطة)
-                </label>
-              </div>
-
               <div>
                 <label className="block text-gray-700 mb-2">
                   عدد الأشخاص الذين تم إفطارهم (100 نقطة لكل شخص):
