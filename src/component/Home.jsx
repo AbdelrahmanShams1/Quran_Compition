@@ -9,6 +9,7 @@ import {
   FaCheckCircle,
   FaInfoCircle,
   FaBolt,
+  FaQuestionCircle,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { db } from "../firebase";
@@ -510,6 +511,15 @@ const Home = () => {
                   الصالحة 💍
                 </span>
               </div>
+              <div className="mt-6">
+                <Link
+                  to={"/Quran_Compition/dayly-question"}
+                  className="w-1/2 text-center bg-gradient-to-b from-purple-600 to-indigo-900 hover:from-purple-700 hover:to-indigo-800 text-white py-3 px-2 rounded-md font-bold text-lg flex items-center justify-center"
+                >
+                  <FaQuestionCircle className="ml-2" />
+                  السؤال اليومي
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -525,7 +535,7 @@ const Home = () => {
 
             <button
               onClick={handleSaveData}
-              className=" outline-none w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-6 rounded-md font-bold text-lg flex items-center justify-center"
+              className=" outline-none w-full bg-gradient-to-b from-purple-600 to-indigo-900 hover:from-purple-700 hover:to-indigo-800 text-white py-3 px-6 rounded-md font-bold text-lg flex items-center justify-center"
             >
               <FaSave className="ml-2" />
               حفظ النقاط
