@@ -2,38 +2,98 @@ import { useNavigate } from "react-router-dom";
 import { FaQuestionCircle, FaArrowLeft, FaSave } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import QuestionsData from "../Questions.json";
+import { db } from "../firebase";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+
 const Question = () => {
+
   const navigate = useNavigate();
   const [randomQuestion, setRandomQuestion] = useState();
   const [answer, setAnswer] = useState("");
-  useEffect(() => {
-    // const today = new Date().toISOString().split("T")[0];
-    const today = "2025-03-01";
-    const selectedQuestions = Object.entries(QuestionsData).filter(
-      ([date, questions]) => {
-        if (date === today) {
-          const QuestionsArray = Object.entries(questions);
-          console.log("questions:", questions);
-          const todayQuestions = QuestionsArray.map(([, value]) => {
-            return {
-              ...value,
-            };
-          });
-          return [date, [...todayQuestions]];
-        }
-      }
-    );
-    console.log("selected:", selectedQuestions);
-    const [[, todayQuestions]] = selectedQuestions;
-    console.log("todayQuestions:", todayQuestions);
+  const [userEmail, setUserEmail] = useState("");
+  let storedUser = localStorage.getItem("loggedInUser");
+  let DOQ = localStorage.getItem("dataOfQuetion")
+  ? JSON.parse(localStorage.getItem("dataOfQuetion"))
+  : { question: "", date: "" };
 
-    const todaysrandomQuestion =
-      todayQuestions[
-        Math.floor(Math.random() * Object.keys(todayQuestions).length)
-      ];
-    setRandomQuestion(todaysrandomQuestion);
+  const [dataOfQuetion,setDataOfQuetion] = useState({
+    question:"",
+    date:""
+  })
+
+  useEffect(() => {
+     storedUser = localStorage.getItem("loggedInUser");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUserEmail(parsedUser.email);
+    }
+    
+     // const today = new Date().toISOString().split("T")[0];
+    const today = "2025-03-08";
+     if(DOQ.date == today){
+      setRandomQuestion(DOQ.question);
+     }
+     else{
+      console.log(DOQ)
+      const selectedQuestions = Object.entries(QuestionsData).filter(
+        ([date, questions]) => {
+          if (date == today) {
+            const QuestionsArray = Object.entries(questions);
+            const todayQuestions = QuestionsArray.map(([, value]) => {
+              return {
+                ...value,
+              };
+            });
+            return [date, [...todayQuestions]];
+          }
+        }
+      );
+  
+      const [[, todayQuestions]] = selectedQuestions;
+      const todaysrandomQuestion =
+        todayQuestions[
+          Math.floor(Math.random() * Object.keys(todayQuestions).length)
+        ];
+      setRandomQuestion(todaysrandomQuestion);
+      const d={
+         question:todaysrandomQuestion,
+     // date:new Date().toISOString().split("T")[0]
+     date:today
+      }
+      setDataOfQuetion(d)
+      localStorage.setItem("dataOfQuetion", JSON.stringify(d));
+      console.log(d)
+     }
   }, []);
-  const handleSaveAnswer = () => {};
+
+  async function handleSaveAnswer() {
+    if (!randomQuestion || !answer.trim()) {
+      alert("يرجى إدخال إجابة قبل الحفظ.");
+      return;
+    }
+
+    const questionData = {
+      question: randomQuestion.question,
+      answer: answer,
+      points: 0, 
+      date: new Date().toISOString(), 
+    };
+
+    
+
+    try {
+      const userRef = doc(db, "users", userEmail);
+      await updateDoc(userRef, {
+        questions: arrayUnion(questionData),
+      });
+      console.log("تم حفظ الإجابة بنجاح في Firestore");
+      console.log(dataOfQuetion)
+     // navigate("/Quran_Compition/standing")
+    } catch (error) {
+      console.error("خطأ في حفظ الإجابة:", error);
+    }
+  }
+
   return (
     <>
       {randomQuestion && (
@@ -59,6 +119,7 @@ const Question = () => {
                   <div className="mt-4">
                     <label className="block text-gray-700 mb-2">إجابتك:</label>
                     <textarea
+                    placeholder=" ادخل الاجابه علي نفس هذا الشكل : اسم السوره - رقم الاية"
                       value={answer}
                       onChange={(e) => setAnswer(e.target.value)}
                       className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none focus:border-indigo-600 transition-all"
@@ -82,4 +143,4 @@ const Question = () => {
   );
 };
 
-export default Question;
+export default Question; 

@@ -44,7 +44,7 @@ const Home = () => {
   const [userGender, setUserGender] = useState("");
   const [userEmail,setUserEmail] =useState("")
   const [previousPoints,setPreviousPoints] =useState(0)
- 
+  let storedUser = localStorage.getItem("loggedInUser");
   const [activitiesPoints, setActivitiesPoints] = useState({
     data: {
       date: "",
@@ -72,17 +72,19 @@ const Home = () => {
         points: 0,
       },
       totalPoints: 0,
+      
     },
   });
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("loggedInUser");
+    storedUser = localStorage.getItem("loggedInUser");
     const points = localStorage.getItem("totalPoints");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUserGender(parsedUser.type);
       setUserEmail(parsedUser.email);
       setPreviousPoints(points>parsedUser.totalPoints? +points : +parsedUser.totalPoints )
+      
     }
   }, []);
 

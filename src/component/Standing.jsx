@@ -11,7 +11,7 @@ const Standing = () => {
       try {
         const querySnapshot = await getDocs(collection(db, "users"));
         const usersData = querySnapshot.docs.map((doc) => {
-          console.log(doc.data());
+         
           return {
             id: doc.id, 
             name: doc.data().name,
