@@ -30,7 +30,7 @@ const Question = () => {
     
      // const today = new Date().toISOString().split("T")[0];
     const today = "2025-03-08";
-     if(DOQ.date == today){
+     if(DOQ.date == today && DOQ.email == JSON.parse(storedUser).email ){
       setRandomQuestion(DOQ.question);
      }
      else{
@@ -56,6 +56,7 @@ const Question = () => {
         ];
       setRandomQuestion(todaysrandomQuestion);
       const d={
+        email: JSON.parse(storedUser).email,
          question:todaysrandomQuestion,
      // date:new Date().toISOString().split("T")[0]
      date:today

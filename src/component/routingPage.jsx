@@ -1,7 +1,19 @@
 import { Link } from "react-router-dom";
+import { useState , useEffect } from "react";
 import fanous from "../assets/fanous.svg";
 
 const RoutingPage = () => {
+    const [name , setName] = useState("")
+
+    useEffect(() => {
+        const user = localStorage.getItem("loggedInUser")
+        if (user) {
+          const parsedUser = JSON.parse(user);
+          console.log(parsedUser)
+          setName(parsedUser.name);
+        
+        }},[])
+        console.log(name)
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-800 via-purple-700 to-indigo-900 text-center p-4">
     
@@ -14,7 +26,7 @@ const RoutingPage = () => {
         </div>
         
         <h1 className="text-2xl sm:text-5xl font-bold text-white drop-shadow-lg mb-4">
-          🌙 مرحبًا بكم في مسابقة رمضان 🎉
+          🌙 مرحبًا بك {name} في مسابقة رمضان 🎉
         </h1>
         
         <p className="text-lg sm:text-xl text-white/90 mt-2 mb-8">
