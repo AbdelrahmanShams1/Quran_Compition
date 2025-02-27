@@ -6,10 +6,5 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [tailwindcss(), react()],
    base : "/Quran_Compition/",
-   build: {
-    outDir: 'dist',
-  },
-  server: {
-    historyApiFallback: true, // لإصلاح مشكلة التوجيه
-  }
+   
 })
