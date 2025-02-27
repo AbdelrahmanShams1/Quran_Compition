@@ -1,5 +1,6 @@
-import { FaTrophy, FaCrown } from "react-icons/fa"; 
+import { FaTrophy, FaCrown ,FaArrowLeft} from "react-icons/fa"; 
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { db } from "../firebase";
 import { collection, getDocs } from "firebase/firestore";
 
@@ -36,7 +37,13 @@ const Standing = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 flex flex-col items-center justify-center p-4">
+     <Link
+            className="inline-flex mb-1.5 items-center text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-2 rounded-md text-sm transition-all"
+            to={"/Quran_Compition/routinPage"}
+          >
+           العودة إلى الصفحة الرئيسية
+          </Link>
       <div className="w-full max-w-md bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-6">
   
         <div className="text-2xl text-center flex items-center justify-center gap-2 font-bold text-indigo-700">

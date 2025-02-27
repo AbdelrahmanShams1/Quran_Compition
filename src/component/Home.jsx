@@ -10,6 +10,7 @@ import {
   FaInfoCircle,
   FaBolt,
   FaQuestionCircle,
+  FaArrowLeft
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { db } from "../firebase";
@@ -229,7 +230,14 @@ const Home = () => {
   console.log(visitPatientRef.current?.checked);
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 py-6 px-4">
+     <Link
+            className="inline-flex mb-1.5 items-center text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-2 rounded-md text-sm transition-all"
+            to={"/Quran_Compition/routinPage"}
+          >
+           العودة إلى الصفحة الرئيسية
+          </Link>
       <div className="max-w-4xl mx-auto bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-6">
+      
         <div className="flex flex-col items-center mb-6 border-b pb-4">
           <FaMoon className="text-yellow-400 w-12 h-12" />
           <h1 className="text-3xl font-bold text-center mt-2 text-indigo-900">

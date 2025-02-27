@@ -32,7 +32,7 @@ const Login = () => {
     if (user) {
 localStorage.setItem("loggedInUser", JSON.stringify(user));
 localStorage.setItem("totalPoints", 0);
-      navigate("/Quran_Compition/home");
+      navigate("/Quran_Compition/routinPage");
     } else {
       setError("إيميل أو كلمة مرور غير صحيحة");
     }

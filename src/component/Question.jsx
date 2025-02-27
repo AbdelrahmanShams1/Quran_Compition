@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate , Link } from "react-router-dom";
 import { FaQuestionCircle, FaArrowLeft, FaSave } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import QuestionsData from "../Questions.json";
@@ -99,13 +99,12 @@ const Question = () => {
       {randomQuestion && (
         <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 p-4">
           <div className="container mx-auto max-w-4xl">
-            <button
-              onClick={() => navigate(-1)}
-              className="inline-flex items-center text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-2 rounded-md text-sm transition-all"
-            >
-              <FaArrowLeft className="w-3 h-3 ml-1" />
-              العودة إلى الصفحة الرئيسية
-            </button>
+          <Link
+            className="inline-flex mb-1.5 items-center text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-2 rounded-md text-sm transition-all"
+            to={"/Quran_Compition/routinPage"}
+          >
+           العودة إلى الصفحة الرئيسية
+          </Link>
             <div className="bg-white/95 backdrop-blur-sm transform transition-all duration-300 hover:shadow-xl p-6 rounded-lg mt-4">
               <div className="text-2xl text-center flex items-center justify-center gap-2 font-bold text-indigo-900">
                 <FaQuestionCircle className="w-6 h-6 text-blue-500" />

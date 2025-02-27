@@ -11,6 +11,7 @@ import Instructions from "./component/Instructions";
 import Welcome from "./component/welcome";
 import Standing from "./component/Standing";
 import Question from "./component/Question";
+import RoutingPage from "./component/routingPage";
 
 
 const App = () => {
@@ -24,6 +25,8 @@ const App = () => {
         <Route path="Quran_Compition" element={<Welcome />} />
         <Route path="Quran_Compition/standing" element={<Standing/>} />
         <Route path="Quran_Compition/dayly-question" element={<Question/>} />
+        <Route path="Quran_Compition/routinPage" element={<RoutingPage/>} />
+
       </>
     )
   );
