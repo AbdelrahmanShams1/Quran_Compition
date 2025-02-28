@@ -36,7 +36,7 @@ const RoutingPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
           <Link
             className="px-6 py-4 text-lg bg-blue-600 text-white rounded-xl shadow-lg hover:bg-blue-700 transition transform hover:scale-105 flex items-center justify-center"
-            to={"/Quran_Compition/"}
+            to={"/Quran_Compition/activity"}
           >
             <span className="ml-2">🔍</span>
             معرفة نشاطاتي

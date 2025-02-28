@@ -12,6 +12,7 @@ import Welcome from "./component/welcome";
 import Standing from "./component/Standing";
 import Question from "./component/Question";
 import RoutingPage from "./component/routingPage";
+import Activity from "./component/activites";
 
 
 const App = () => {
@@ -26,7 +27,7 @@ const App = () => {
         <Route path="Quran_Compition/standing" element={<Standing/>} />
         <Route path="Quran_Compition/dayly-question" element={<Question/>} />
         <Route path="Quran_Compition/routinPage" element={<RoutingPage/>} />
-
+        <Route path="Quran_Compition/activity" element={<Activity />} />
       </>
     )
   );

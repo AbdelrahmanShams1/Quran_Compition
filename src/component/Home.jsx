@@ -1,4 +1,3 @@
-import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FaCalendar,
@@ -10,9 +9,11 @@ import {
   FaInfoCircle,
   FaBolt,
   FaQuestionCircle,
-  FaArrowLeft
+  FaArrowLeft,
+  FaPray
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useRef , useState ,useEffect } from "react";
 import { db } from "../firebase";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
@@ -34,6 +35,7 @@ const Home = () => {
   const taraweehPlaceRef = useRef();
   const witrRef = useRef();
   const tahagodRed = useRef();
+  const rawatibPrayersRef = useRef();
   const morningAdhkarRef = useRef();
   const eveningAdhkarRef = useRef();
   const generalAdhkarRef = useRef();
@@ -58,6 +60,7 @@ const Home = () => {
       duha: { numOfPray: 0, points: 0 },
       taraweeh: { type: "", numOfPray: 0, witr: false, points: 0 },
       tahajjud: { numOfPray: 0, points: 0 },
+      rawatib: { numOfPray: 0, points: 0 },
       adhkar: {
         morning: false,
         evening: false,
@@ -161,6 +164,10 @@ const Home = () => {
             numOfPray: +tahagodRed.current.value,
             points: +tahagodRed.current.value * 70,
         },
+        rawatib: {
+            numOfPray: +rawatibPrayersRef.current.value,
+            points: +rawatibPrayersRef.current.value * 50,
+        },
         adhkar: {
             morning: morningAdhkarRef.current.checked,
             evening: eveningAdhkarRef.current.checked,
@@ -187,11 +194,11 @@ const Home = () => {
     const newPoints = data.fajr.points + data.dhuhr.points + data.asr.points +
         data.maghrib.points + data.isha.points + data.quran.points +
         data.duha.points + data.taraweeh.points + data.tahajjud.points +
-        data.adhkar.points + data.extra.points;
+        data.rawatib.points + data.adhkar.points + data.extra.points;
 
    
     const totalPoints = previousPoints + newPoints;
-
+    data.totalPoints = newPoints;
    
     localStorage.setItem("totalPoints", JSON.stringify(totalPoints));
 
@@ -411,6 +418,28 @@ const Home = () => {
             </div>
           </div>
 
+          <div className="bg-orange-50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-orange-800 mb-4 flex items-center">
+              <FaPray className="ml-2" />
+              السنن الرواتب
+            </h2>
+            <div>
+              <label className="block text-gray-700 mb-2">
+                عدد ركعات السنن الرواتب (40 نقطة لكل ركعة):
+              </label>
+              <input
+                ref={rawatibPrayersRef}
+                type="number"
+                min="0"
+                max="12"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none"
+              />
+              <span className="text-sm text-gray-500 block mt-1">
+                * تشمل سنن الفجر (2 ركعة)، سنن الظهر (2+2 ركعة)، سنن المغرب (2 ركعة)، سنن العشاء (2 ركعة)
+              </span>
+            </div>
+          </div>
+
           <div className="bg-teal-50 p-4 rounded-lg">
             <h2 className="text-xl font-bold text-teal-800 mb-4 flex items-center">
               <FaBolt className="ml-2" />
@@ -521,15 +550,7 @@ const Home = () => {
                   الصالحة 💍
                 </span>
               </div>
-              <div className="mt-6">
-                <Link
-                  to={"/Quran_Compition/dayly-question"}
-                  className="w-1/2 text-center bg-gradient-to-b from-purple-600 to-indigo-900 hover:from-purple-700 hover:to-indigo-800 text-white py-3 px-2 rounded-md font-bold text-lg flex items-center justify-center"
-                >
-                  <FaQuestionCircle className="ml-2" />
-                  السؤال اليومي
-                </Link>
-              </div>
+             
             </div>
           </div>
 
