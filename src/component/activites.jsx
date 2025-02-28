@@ -218,6 +218,26 @@ const Index = () => {
                 </div>
               </div>
 
+              {/* Rawatib Section */}
+              {selectedActivity.rawatib && (
+  <div className="bg-indigo-50 p-4 rounded-lg shadow">
+    <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+      <FaPrayingHands className="ml-2" />
+      سنن الرواتب
+    </h2>
+    <div className="bg-white p-3 rounded border border-indigo-100">
+      <div className="flex justify-between items-center">
+        <h3 className="font-bold text-indigo-700">إجمالي سنن الرواتب</h3>
+        <span className="font-bold text-indigo-600">{selectedActivity.rawatib.points} نقطة</span>
+      </div>
+      <div className="mt-2 text-gray-600 text-sm">
+        <div>عدد الركعات: {selectedActivity.rawatib.numOfPray}</div>
+      </div>
+    </div>
+  </div>
+)}
+
+
               {/* Duha Section */}
               <div className="bg-amber-50 p-4 rounded-lg shadow">
                 <h2 className="text-xl font-bold text-amber-800 mb-4 flex items-center">

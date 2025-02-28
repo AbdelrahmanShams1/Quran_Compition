@@ -67,6 +67,10 @@ const Home = () => {
         general: 0,
         points: 0,
       }, 
+      rawatib: {
+        numOfPray: 0,
+        points: 0,
+      },
       extra: {
         iftar: 0,
         visitPatient: false,
