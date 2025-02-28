@@ -8,7 +8,7 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [type, setType] = useState(""); 
+  const [type, setType] = useState("");
   const [age, setAge] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,11 +16,19 @@ const SignUp = () => {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    if (password.length < 6) { 
+    if (password.length < 6) {
       setError({ message: "كلمة المرور يجب أن تحتوي على 6 أحرف على الأقل." });
       return;
     }
-    const newUser = { name, email, password, type, age, activities: [] ,totalPoints : 0};
+    const newUser = {
+      name,
+      email,
+      password,
+      type,
+      age,
+      activities: [],
+      totalPoints: 0,
+    };
     const userRef = doc(db, "users", email);
     const userDoc = await getDoc(userRef);
 
@@ -36,7 +44,9 @@ const SignUp = () => {
       navigate("/Quran_Compition/login");
     } catch (error) {
       console.error("Error saving user to Firestore:", error.message);
-      setError({ message: error.message||"حدث خطأ أثناء التسجيل. حاول مرة أخرى." });
+      setError({
+        message: error.message || "حدث خطأ أثناء التسجيل. حاول مرة أخرى.",
+      });
       alert("حدث خطأ أثناء التسجيل. حاول مرة أخرى.");
     }
     setLoading(false);
@@ -61,7 +71,6 @@ const SignUp = () => {
             required
           />
 
-       
           <select
             className="outline-none w-full  px-4 py-2 border border-gray-300 rounded-md text-right "
             dir="rtl"
@@ -69,7 +78,9 @@ const SignUp = () => {
             onChange={(e) => setType(e.target.value)}
             required
           >
-            <option  value="" disabled>اختر النوع</option>
+            <option value="" disabled>
+              اختر النوع
+            </option>
             <option value="male">ذكر</option>
             <option value="female">أنثى</option>
           </select>
@@ -110,8 +121,10 @@ const SignUp = () => {
             disabled={loading}
             className="outline-none w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md flex items-center justify-center"
           >
-            {loading&&(<div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>) }
-            {!loading && (<FaUserPlus className="ml-2 w-4 h-4" />)}
+            {loading && (
+              <div className="w-6 h-6 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            )}
+            {!loading && <FaUserPlus className="ml-2 w-4 h-4" />}
             {!loading && " إنشاء حساب"}
           </button>
         </form>

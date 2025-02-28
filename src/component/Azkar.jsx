@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaInfoCircle, FaCheckCircle } from "react-icons/fa";
-import instructions from "../instructions.json";
+import azkar from "../azkar.json";
 import { useEffect, useState } from "react";
 
-const Instructions = () => {
+const Azkar = () => {
   const navigate = useNavigate();
   const [userGender, setUserGender] = useState("");
   const data = instructions;
@@ -112,4 +112,4 @@ const Instructions = () => {
   );
 };
 
-export default Instructions;
+export default Azkar;
