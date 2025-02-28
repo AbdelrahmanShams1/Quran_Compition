@@ -67,6 +67,16 @@ const Home = () => {
         general: 0,
         points: 0,
       }, 
+      rawatib: {
+        numOfPray: 0,
+        points: 0,
+      },
+      questionData : {
+        question: "",
+        answer: "",
+        points: 0, 
+        date: "", 
+      },
       extra: {
         iftar: 0,
         visitPatient: false,
@@ -176,6 +186,13 @@ const Home = () => {
                 (eveningAdhkarRef.current.checked ? 200 : 0) +
                 (+generalAdhkarRef.current.value / 1000) * 200,
         },
+        
+      questionData : {
+        question: "",
+        answer: "",
+        points: 0, 
+        date: "", 
+      },
         extra: {
             iftar: +iftarRef.current.value,
             visitPatient: visitPatientRef.current.checked,
