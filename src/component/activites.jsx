@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaArrowRight, FaCalendar, FaTrophy, FaChartLine, FaPrayingHands, FaBook, FaMoon, FaSun, FaBolt } from 'react-icons/fa';
+import { FaArrowRight, FaCalendar, FaTrophy, FaStar, FaChartLine, FaPrayingHands, FaBook, FaMoon, FaSun, FaBolt } from 'react-icons/fa';
 
 const Index = () => {
   const [activitiesHistory, setActivitiesHistory] = useState([]);
+  const [quetionHistory, setQuetionHistory] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selecteQuetion, setQuetion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalPoints,setTotalPoints] = useState(0)
 
@@ -17,6 +19,7 @@ const Index = () => {
           // Check if the data is in the expected format
           const userData = JSON.parse(storedUser);
           setTotalPoints(userData.totalPoints)
+          setQuetionHistory(userData.questions);
           
           // Check if activities is an array
           if (userData.activities && Array.isArray(userData.activities)) {
@@ -24,7 +27,6 @@ const Index = () => {
             console.log(1)
             if (userData.activities.length > 0) {
               setSelectedDate(userData.activities[0].date);
-              
             }
           } else if (userData.data) {
             // If the data is in the format you provided in your message
@@ -115,6 +117,7 @@ const Index = () => {
 
   const selectedActivity = getSelectedDateData();
   console.log(selectedActivity)
+  console.log(quetionHistory)
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 py-6 px-4">
@@ -332,26 +335,35 @@ const Index = () => {
               </div>
 
               {/* Daily Question Section - optional section that might not exist in your data */}
-              {selectedActivity.dailyQuestion && (
-                <div className="bg-yellow-50 p-4 rounded-lg shadow">
-                  <h2 className="text-xl font-bold text-yellow-800 mb-4 flex items-center">
-                    <FaCalendar className="ml-2" />
-                    السؤال اليومي
-                  </h2>
-                  <div className="bg-white p-3 rounded border border-yellow-100">
-                    <div className="flex justify-between items-center">
-                      <h3 className="font-bold text-yellow-700">السؤال اليومي</h3>
-                      <span className="font-bold text-yellow-600">{selectedActivity.dailyQuestion.points} نقطة</span>
-                    </div>
-                    <div className="mt-2 text-gray-600">
-                      <div>تمت الإجابة: {selectedActivity.dailyQuestion.answered ? 'نعم ✓' : 'لا ✗'}</div>
-                      {selectedActivity.dailyQuestion.answered && (
-                        <div>الإجابة: {selectedActivity.dailyQuestion.correct ? 'صحيحة ✓' : 'خاطئة ✗'}</div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
+              {quetionHistory?.length > 0 && selectedDate && (
+  <div className="bg-indigo-50 p-4 rounded-lg shadow">
+    <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+      <FaBook className="ml-2" />
+      الأسئلة اليومية - {new Date(selectedDate).toLocaleDateString()}
+    </h2>
+
+    {quetionHistory
+      .filter(q => new Date(q.date).toLocaleDateString() === new Date(selectedDate).toLocaleDateString())
+      .map((q, index) => (
+        <div key={index} className="bg-white p-3 rounded-md shadow-md mb-2">
+          <p className="font-bold text-indigo-700">السؤال: {q.question}</p>
+          <p className="text-gray-800">الإجابة: {q.answer}</p>
+          <p className="text-sm text-gray-500">التاريخ: {new Date(q.date).toLocaleDateString()}</p>
+          <p className="text-sm font-semibold text-indigo-600 flex items-center">
+            <FaStar className="ml-1 text-yellow-500" />
+            النقاط: {q.points}
+          </p>
+        </div>
+      ))
+    }
+
+    {quetionHistory.filter(q => new Date(q.date).toLocaleDateString() === new Date(selectedDate).toLocaleDateString()).length === 0 && (
+      <p className="text-gray-600">لا توجد أسئلة لهذا التاريخ.</p>
+    )}
+  </div>
+)}
+
+
             </div>
           )}
         </div>
