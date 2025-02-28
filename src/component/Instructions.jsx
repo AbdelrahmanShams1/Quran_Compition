@@ -31,6 +31,10 @@ const Instructions = () => {
             <FaInfoCircle className="w-6 h-6 text-blue-500" />
             تعليمات المسابقة
           </div>
+          <p className="flex text-red-600 text-xl text-center mt-4 rounded-lg py-2 px-3 shadow-sm shadow-red-400">
+            <FaInfoCircle className="w-6 h-6 text-red-600 me-2" />
+            يجب ملئ بيانات الأنشطة بعد صلاة العصر حيث يبدأيومك من المغرب و ينتهي بغروب شمس اليوم التالي
+          </p>
 
           <div className="space-y-6 mt-6">
             {data.map((section) => (
@@ -100,7 +104,7 @@ const Instructions = () => {
                     </p>
                 ) : (
                   <p className="flex items-center gap-2 transform transition-all duration-300 hover:translate-x-2">
-                    <span className="text-xl text-green-700">{`(${section.proof})`}</span>{" "}
+                    <span className="text-xl text-green-700">{section.proof&&`(${section.proof})`}</span>{" "}
                   </p>
                 )}
               </>

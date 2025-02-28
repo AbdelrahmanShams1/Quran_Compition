@@ -1,20 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft, FaInfoCircle, FaCheckCircle } from "react-icons/fa";
+import { FaArrowLeft, FaInfoCircle,  FaMoon,
+  FaSun, } from "react-icons/fa";
 import azkar from "../azkar.json";
-import { useEffect, useState } from "react";
 
 const Azkar = () => {
   const navigate = useNavigate();
-  const [userGender, setUserGender] = useState("");
-  const data = instructions;
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("loggedInUser");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUserGender(parsedUser.type);
-    }
-  }, []);
+  const data = azkar;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 p-4">
@@ -27,83 +18,21 @@ const Azkar = () => {
           العودة إلى الصفحة الرئيسية
         </button>
         <div className="bg-white/95 backdrop-blur-sm transform transition-all duration-300 hover:shadow-xl p-6 rounded-lg mt-4">
-          <div className="text-2xl text-center flex items-center justify-center gap-2 font-bold text-indigo-900">
-            <FaInfoCircle className="w-6 h-6 text-blue-500" />
-            تعليمات المسابقة
+          <div className="text-2xl text-center flex items-center justify-center gap-2 font-bold text-green-900">
+            <FaSun className="w-6 h-6 text-yellow-500 me-2" />
+            أذكار الصباح والمساء
+            <FaMoon className="w-6 h-6 text-blue-500 ms-2" />
           </div>
 
           <div className="space-y-6 mt-6">
-            {data.map((section) => (
-              <>
-                <div key={section.key} className="space-y-4">
-                  <h3 className="text-xl font-bold text-indigo-900">
-                    {section.name}:
-                  </h3>
-
-                  {section.categories ? (
-                    section.categories
-                      .filter((category) => category.key === userGender)
-                      .map((category) => (
-                        
-                          <div
-                            key={category.key}
-                            className="bg-blue-50 p-4 rounded-lg space-y-2"
-                          >
-                            <h4 className="text-lg font-bold text-indigo-700">
-                              {category.name}
-                            </h4>
-                            {category.types.map((type) => (
-                              <p
-                                key={type.key}
-                                className="flex items-center gap-2 transform transition-all duration-300 hover:translate-x-2"
-                              >
-                                <FaCheckCircle className="w-4 h-4 text-green-600" />
-                                <span className="font-bold">
-                                  {type.points} نقطة:
-                                </span>{" "}
-                                {type.name}
-                              </p>
-                            ))}
-                          </div>
-                        
-                      ))
-                  ) : (
-                    <div className="bg-blue-50 p-4 rounded-lg space-y-2">
-                      {section.details.map((item) => (
-                        
-                          <p
-                            key={item.key}
-                            className="flex items-center gap-2 transform transition-all duration-300 hover:translate-x-2"
-                          >
-                            <FaCheckCircle className="w-4 h-4 text-green-600" />
-                            {item.points ? (
-                              <>
-                                <span className="font-bold">
-                                  {item.points} نقطة:
-                                </span>{" "}
-                                {item.name}
-                              </>
-                            ) : (
-                              item.name
-                            )}
-                          </p>
-                        
-                      ))}
-                    </div>
-                  )}
-                </div>
-                {Array.isArray(section.proof) ? (
-                <p  className="flex items-center gap-2 transform transition-all duration-300 hover:translate-x-2">
-                  {section.proof.map((prof) => {
-                      <span key={prof} className="text-xl text-green-700">{`(${prof})`}</span>
-                    })}
-                    </p>
-                ) : (
-                  <p className="flex items-center gap-2 transform transition-all duration-300 hover:translate-x-2">
-                    <span className="text-xl text-green-700">{`(${section.proof})`}</span>{" "}
-                  </p>
-                )}
-              </>
+            {data.map((zekr) => (
+              <div
+                key={zekr.zekr}
+                className="bg-blue-50 p-4 rounded-lg space-y-2 shadow-md"
+              >
+                <p className="text-lg/loose p-4 pb-8 border-b text-green-700 border-b-indigo-500">{`"${zekr.zekr}"`}</p>
+                <div className="text-lg/loose p-4 flex items-center"><span className="font-semibold">عدد مرات التكرار :</span><p className="text-white text-xl font-semibold size-10 flex items-center justify-center ms-2 rounded-full bg-indigo-700">{` ${zekr.count}`}</p></div>
+              </div>
             ))}
           </div>
         </div>

@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   FaArrowRight,
@@ -12,17 +11,11 @@ import {
   FaSun,
   FaBolt,
 } from "react-icons/fa";
-=======
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { FaArrowRight, FaCalendar, FaTrophy, FaStar, FaChartLine, FaPrayingHands, FaBook, FaMoon, FaSun, FaBolt } from 'react-icons/fa';
->>>>>>> e6121df72a5fae135241420b5c5d24ff24808346
-
 const Index = () => {
   const [activitiesHistory, setActivitiesHistory] = useState([]);
-  const [quetionHistory, setQuetionHistory] = useState([]);
+  // const [quetionHistory, setQuetionHistory] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selecteQuetion, setQuetion] = useState(null);
+  // const [selecteQuetion, setQuetion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalPoints, setTotalPoints] = useState(0);
 
@@ -34,14 +27,9 @@ const Index = () => {
         if (storedUser) {
           // Check if the data is in the expected format
           const userData = JSON.parse(storedUser);
-<<<<<<< HEAD
+
           setTotalPoints(userData.totalPoints);
 
-=======
-          setTotalPoints(userData.totalPoints)
-          setQuetionHistory(userData.questions);
-          
->>>>>>> e6121df72a5fae135241420b5c5d24ff24808346
           // Check if activities is an array
           if (userData.activities && Array.isArray(userData.activities)) {
             setActivitiesHistory(userData.activities);
@@ -169,12 +157,7 @@ const Index = () => {
   }
 
   const selectedActivity = getSelectedDateData();
-<<<<<<< HEAD
   console.log(selectedActivity);
-=======
-  console.log(selectedActivity)
-  console.log(quetionHistory)
->>>>>>> e6121df72a5fae135241420b5c5d24ff24808346
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 py-6 px-4">
@@ -309,23 +292,28 @@ const Index = () => {
 
               {/* Rawatib Section */}
               {selectedActivity.rawatib && (
-  <div className="bg-indigo-50 p-4 rounded-lg shadow">
-    <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
-      <FaPrayingHands className="ml-2" />
-      سنن الرواتب
-    </h2>
-    <div className="bg-white p-3 rounded border border-indigo-100">
-      <div className="flex justify-between items-center">
-        <h3 className="font-bold text-indigo-700">إجمالي سنن الرواتب</h3>
-        <span className="font-bold text-indigo-600">{selectedActivity.rawatib.points} نقطة</span>
-      </div>
-      <div className="mt-2 text-gray-600 text-sm">
-        <div>عدد الركعات: {selectedActivity.rawatib.numOfPray}</div>
-      </div>
-    </div>
-  </div>
-)}
-
+                <div className="bg-indigo-50 p-4 rounded-lg shadow">
+                  <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+                    <FaPrayingHands className="ml-2" />
+                    سنن الرواتب
+                  </h2>
+                  <div className="bg-white p-3 rounded border border-indigo-100">
+                    <div className="flex justify-between items-center">
+                      <h3 className="font-bold text-indigo-700">
+                        إجمالي سنن الرواتب
+                      </h3>
+                      <span className="font-bold text-indigo-600">
+                        {selectedActivity.rawatib.points} نقطة
+                      </span>
+                    </div>
+                    <div className="mt-2 text-gray-600 text-sm">
+                      <div>
+                        عدد الركعات: {selectedActivity.rawatib.numOfPray}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Duha Section */}
               <div className="bg-amber-50 p-4 rounded-lg shadow">
@@ -458,7 +446,7 @@ const Index = () => {
               </div>
 
               {/* Daily Question Section - optional section that might not exist in your data */}
-<<<<<<< HEAD
+
               {selectedActivity.dailyQuestion && (
                 <div className="bg-yellow-50 p-4 rounded-lg shadow">
                   <h2 className="text-xl font-bold text-yellow-800 mb-4 flex items-center">
@@ -493,37 +481,6 @@ const Index = () => {
                   </div>
                 </div>
               )}
-=======
-              {quetionHistory?.length > 0 && selectedDate && (
-  <div className="bg-indigo-50 p-4 rounded-lg shadow">
-    <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
-      <FaBook className="ml-2" />
-      الأسئلة اليومية - {new Date(selectedDate).toLocaleDateString()}
-    </h2>
-
-    {quetionHistory
-      .filter(q => new Date(q.date).toLocaleDateString() === new Date(selectedDate).toLocaleDateString())
-      .map((q, index) => (
-        <div key={index} className="bg-white p-3 rounded-md shadow-md mb-2">
-          <p className="font-bold text-indigo-700">السؤال: {q.question}</p>
-          <p className="text-gray-800">الإجابة: {q.answer}</p>
-          <p className="text-sm text-gray-500">التاريخ: {new Date(q.date).toLocaleDateString()}</p>
-          <p className="text-sm font-semibold text-indigo-600 flex items-center">
-            <FaStar className="ml-1 text-yellow-500" />
-            النقاط: {q.points}
-          </p>
-        </div>
-      ))
-    }
-
-    {quetionHistory.filter(q => new Date(q.date).toLocaleDateString() === new Date(selectedDate).toLocaleDateString()).length === 0 && (
-      <p className="text-gray-600">لا توجد أسئلة لهذا التاريخ.</p>
-    )}
-  </div>
-)}
-
-
->>>>>>> e6121df72a5fae135241420b5c5d24ff24808346
             </div>
           )}
         </div>

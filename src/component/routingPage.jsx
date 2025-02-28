@@ -64,6 +64,22 @@ const RoutingPage = () => {
           <span className="ml-2">🏆</span>
           الترتيب
         </Link>
+
+        <Link
+          className="px-6 py-4 text-lg bg-orange-600 text-white rounded-xl shadow-lg hover:bg-orange-700 transition transform hover:scale-105 flex items-center justify-center"
+          to={"/Quran_Compition/instructions"}
+        >
+          <span className="ml-2">📜</span>
+          التعليمات
+        </Link>
+
+        <Link
+          className="px-6 py-4 text-lg bg-teal-600 text-white rounded-xl shadow-lg hover:bg-teal-700 transition transform hover:scale-105 flex items-center justify-center"
+          to={"/Quran_Compition/azkar"}
+        >
+          <span className="ml-2">🕌</span>
+          الأذكار
+        </Link>
       </div>
 
       <p className="text-white/70 mt-8 text-sm">
