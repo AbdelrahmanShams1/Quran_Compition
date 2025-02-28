@@ -28,7 +28,6 @@ export default function Welcome() {
           سجل الدخول 🚪
         </Link>
       </div>
-     
     </div>
   );
 }

@@ -30,8 +30,8 @@ const Login = () => {
       (user) => user.email === email && user.password === password
     );
     if (user) {
-localStorage.setItem("loggedInUser", JSON.stringify(user));
-localStorage.setItem("totalPoints", 0);
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
+      localStorage.setItem("totalPoints", 0);
       navigate("/Quran_Compition/routinPage");
     } else {
       setError("إيميل أو كلمة مرور غير صحيحة");
@@ -84,7 +84,6 @@ localStorage.setItem("totalPoints", 0);
           >
             التسجيل بحساب جديد
           </Link>
-         
         </form>
       </div>
     </div>
