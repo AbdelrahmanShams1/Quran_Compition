@@ -31,7 +31,6 @@ const Index = () => {
           setTotalPoints(userData.totalPoints || 0);
           setActivitiesHistory(userData.activities || {});
           setSelectedDate(Object.keys(userData.activities)[0]); // تعيين أول تاريخ كقيمة افتراضية
-          console.log(activitiesHistory);
         } else {
           console.log("No such document!");
         }
@@ -53,6 +52,7 @@ const Index = () => {
   const getSelectedDateData = () => {
     return activitiesHistory[selectedDate];
   };
+
 
   if (loading) {
     return (

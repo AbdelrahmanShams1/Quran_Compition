@@ -48,14 +48,14 @@ const Home = () => {
   const [userEmail,setUserEmail] =useState("")
   const [previousPoints,setPreviousPoints] =useState(0)
   let storedUser = localStorage.getItem("loggedInUser");
-  const [modifyData ,setModifyData] = useState({})
-  const lastRecord=0
+  const [modifyData ,setModifyData] = useState({});
+  const [lastRecord, setLastRecord] = useState(0);
   const [activitiesHistory, setActivitiesHistory] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
   const [totalPoints, setTotalPoints] = useState(0);
   const [loading, setLoading] = useState(true);
-
-
+  let dateActiv = new Date();
+  let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
   
   const [activitiesPoints, setActivitiesPoints] = useState({
     data: {
@@ -109,8 +109,7 @@ const Home = () => {
       setUserEmail(parsedUser.email);
       setPreviousPoints(points>parsedUser.totalPoints? +points : +parsedUser.totalPoints )
     }
-    let dateActiv = new Date();
-    let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
+
     const fetchData = async () => {
       try {
         const userRef = doc(db, "users", "aboda1"); // استبدل "aboda1" بالبريد الإلكتروني الفعلي
@@ -118,10 +117,10 @@ const Home = () => {
         
         if (userDoc.exists()) {
           const userData = userDoc.data();
+          setModifyData(userData);
           setTotalPoints(userData.totalPoints || 0);
           setActivitiesHistory(userData.activities || {});
           setSelectedDate(Object.keys(userData.activities)[0]); // تعيين أول تاريخ كقيمة افتراضية
-          console.log(userData.activities[formattedDate]);
         } else {
           console.log("No such document!");
         }
@@ -136,7 +135,10 @@ const Home = () => {
   }, []);
 
   async function handleSaveData() {
+    let dateActiv = new Date();
+    let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
     const todayDate = new Date();
+
     const data = {
         date: todayDate,
         fajr: {
@@ -226,6 +228,9 @@ const Home = () => {
         points: 0, 
         date: "", 
       },
+      try:  activitiesHistory[formattedDate]?.try !== undefined 
+      ? activitiesHistory[formattedDate].try + 1 
+      : 0,
         extra: {
             iftar: +iftarRef.current.value,
             visitPatient: visitPatientRef.current.checked,
@@ -239,35 +244,40 @@ const Home = () => {
                 (prayForRef.current.checked ? 200 : 0),
         },
     };
+    const userRef = doc(db, "users", userEmail);
 
-   
+
+
     const newPoints = data.fajr.points + data.dhuhr.points + data.asr.points +
         data.maghrib.points + data.isha.points + data.quran.points +
         data.duha.points + data.taraweeh.points + data.tahajjud.points +
         data.rawatib.points + data.adhkar.points + data.extra.points;
 
-   
-    const totalPoints = previousPoints + newPoints;
+      
     data.totalPointsPerDay = newPoints;
-    
     localStorage.setItem("totalPoints", JSON.stringify(totalPoints));
 
 
     try {
       const parsedUser = JSON.parse(storedUser);
-    
       // Check if data exists for the date
-      if (!parsedUser.activities[todayDate.toISOString().split("T")[0]]) {
+      if (!modifyData.activities[formattedDate]) {
         setActivitiesPoints({ data });
-        const userRef = doc(db, "users", userEmail);
-        await updateDoc(userRef, {
-          [`activities.${todayDate.toISOString().split("T")[0]}`]: data,
-          totalPoints: totalPoints,
-        });
-    
+        setTotalPoints(data.totalPointsPerDay);
+              await updateDoc(userRef, {
+                [`activities.${formattedDate}`]: data,
+                totalPoints: data.totalPointsPerDay,
+              });
         console.log("تم حفظ البيانات وتحديث النقاط بنجاح في Firestore");
         navigate("/Quran_Compition/standing");
       } else {
+        setActivitiesPoints({ data });
+        setTotalPoints(totalPoints - lastRecord + newPoints);
+
+        await updateDoc(userRef, {
+          [`activities.${formattedDate}`]: data,
+          totalPoints: totalPoints,
+        });
         console.log("تم العثور على البيانات بالفعل، لن يتم الإضافة");
       }
     }
