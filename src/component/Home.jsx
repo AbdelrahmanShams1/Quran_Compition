@@ -229,12 +229,11 @@ const Home = () => {
       const parsedUser = JSON.parse(storedUser);
     
       // Check if data exists for the date
-      if (!parsedUser.activities[formattedDate]) {
+      if (!parsedUser.activities[todayDate.toISOString().split("T")[0]]) {
         setActivitiesPoints({ data });
-    
         const userRef = doc(db, "users", userEmail);
         await updateDoc(userRef, {
-          [`activities.${formattedDate}`]: data,
+          [`activities.${todayDate.toISOString().split("T")[0]}`]: data,
           totalPoints: totalPoints,
         });
     
@@ -287,7 +286,7 @@ const Home = () => {
         <div className="space-y-8" dir="rtl">
           <div>
             <Link
-              to={"/Quran_Compition/instraction"}
+              to={"/Quran_Compition/instructions"}
               className="col-span-2 text-center bg-gradient-to-b from-purple-600 to-indigo-900 hover:from-purple-700 hover:to-indigo-800 text-white py-3 px-2 rounded-md font-bold text-lg flex items-center justify-center"
             >
               <FaInfoCircle className="ml-2" />
