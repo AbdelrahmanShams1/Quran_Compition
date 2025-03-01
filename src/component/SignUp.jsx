@@ -28,6 +28,7 @@ const SignUp = () => {
       age,
       activities: [],
       totalPoints: 0,
+      
     };
     const userRef = doc(db, "users", email);
     const userDoc = await getDoc(userRef);

@@ -11,6 +11,8 @@ import {
   FaSun,
   FaBolt,
 } from "react-icons/fa";
+import {  doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 const Index = () => {
   const [activitiesHistory, setActivitiesHistory] = useState([]);
   // const [quetionHistory, setQuetionHistory] = useState([]);
@@ -18,126 +20,51 @@ const Index = () => {
   // const [selecteQuetion, setQuetion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalPoints, setTotalPoints] = useState(0);
+  const [users, setUsers] = useState([]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  let s ='2025-02-28'
 
   // Fetch user activity history
   useEffect(() => {
+
     const fetchData = async () => {
-      try {
-        const storedUser = localStorage.getItem("loggedInUser");
-        if (storedUser) {
-          // Check if the data is in the expected format
-          const userData = JSON.parse(storedUser);
+      const fetchUsers = async (emailE) => {
+        try {
+          const userRef =  doc(db, "users", emailE);
+          const usersData = await  getDoc(userRef);
 
-          setTotalPoints(userData.totalPoints);
-
-          // Check if activities is an array
-          if (userData.activities && Array.isArray(userData.activities)) {
-            setActivitiesHistory(userData.activities);
-            console.log(1);
-            if (userData.activities.length > 0) {
-              setSelectedDate(userData.activities[0].date);
-            }
-          } else if (userData.data) {
-            // If the data is in the format you provided in your message
-            // Convert single data object to an array format
-            console.log(2);
-            const formattedActivity = {
-              date: userData.data.date,
-              totalPoints: userData.data.totalPoints,
-              prayers: {
-                fajr: {
-                  type: userData.data.fajr.type,
-                  azkar: userData.data.fajr.azkar,
-                  points: userData.data.fajr.points,
-                },
-                dhuhr: {
-                  type: userData.data.dhuhr.type,
-                  azkar: userData.data.dhuhr.azkar,
-                  points: userData.data.dhuhr.points,
-                },
-                asr: {
-                  type: userData.data.asr.type,
-                  azkar: userData.data.asr.azkar,
-                  points: userData.data.asr.points,
-                },
-                maghrib: {
-                  type: userData.data.maghrib.type,
-                  azkar: userData.data.maghrib.azkar,
-                  points: userData.data.maghrib.points,
-                },
-                isha: {
-                  type: userData.data.isha.type,
-                  azkar: userData.data.isha.azkar,
-                  points: userData.data.isha.points,
-                },
-              },
-              quran: {
-                pages: userData.data.quran.numOfPages,
-                points: userData.data.quran.points,
-              },
-              duha: {
-                rakaat: userData.data.duha.numOfPray,
-                points: userData.data.duha.points,
-              },
-              taraweeh: {
-                place: userData.data.taraweeh.type,
-                rakaat: userData.data.taraweeh.numOfPray,
-                witr: userData.data.taraweeh.witr,
-                points: userData.data.taraweeh.points,
-              },
-              tahajjud: {
-                rakaat: userData.data.tahajjud.numOfPray,
-                points: userData.data.tahajjud.points,
-              },
-              adhkar: {
-                morning: userData.data.adhkar.morning,
-                evening: userData.data.adhkar.evening,
-                general: userData.data.adhkar.general,
-                points: userData.data.adhkar.points,
-              },
-              additional: {
-                iftar: userData.data.extra.iftar,
-                visitPatient: userData.data.extra.visitPatient,
-                charity: userData.data.extra.charity,
-                funeral: userData.data.extra.funeral,
-                prayFor: userData.data.extra.prayFor,
-                points: userData.data.extra.points,
-              },
-              dailyQuestion: {
-                answered: false,
-                correct: false,
-                points: 0,
-              },
-            };
-            setActivitiesHistory([formattedActivity]);
-            setSelectedDate(formattedActivity.date);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
+        //  setUsers(usersData);
+        if (usersData.exists()) {
+          console.log(123)
+          console.log("User Data:", usersData.data());
+          console.log(usersData.data().activities[s])
+          setTotalPoints(usersData.data().totalPoints);
+          setActivitiesHistory(usersData.data().activities);
+          setSelectedDate(usersData.data().activities[s].date)
+       
       }
+         
+        }  catch (error) {
+            console.error("Error fetching data:", error);
+           } finally {
+             setLoading(false);
+           }
+      };
+      fetchUsers("aboda1");
     };
 
     fetchData();
   }, []);
+  console.log(activitiesHistory)
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
   };
 
   const getSelectedDateData = () => {
-    return activitiesHistory.find((activity) => {
-      if (!activity.date || !selectedDate) return false;
-
-      const activityDate = new Date(activity.date);
-      const selected = new Date(selectedDate);
-      return (
-        activityDate.toISOString().split("T")[0] ===
-        selected.toISOString().split("T")[0]
-      );
-    });
+    
+    return activitiesHistory[s]
   };
 
   if (loading) {
@@ -181,20 +108,20 @@ const Index = () => {
           {/* Date selector */}
           <div className="mb-8 overflow-x-auto pb-2">
             <div className="flex space-x-2 space-x-reverse">
-              {activitiesHistory.map((activity, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleDateSelect(activity.date)}
-                  className={`px-4 py-2 rounded-md flex items-center whitespace-nowrap ${
-                    selectedDate === activity.date
-                      ? "bg-indigo-600 text-white"
-                      : "bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
-                  }`}
-                >
-                  <FaCalendar className="ml-2" />
-                  {new Date(activity.date).toISOString().split("T")[0]}
-                </button>
-              ))}
+            {Object.entries(activitiesHistory).map(([key, activity]) => (
+  <button
+    key={key}
+    onClick={() => handleDateSelect(activity.date)}
+    className={`px-4 py-2 rounded-md flex items-center whitespace-nowrap ${
+      selectedDate === activity.date
+        ? "bg-indigo-600 text-white"
+        : "bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
+    }`}
+  >
+    <FaCalendar className="ml-2" />
+    {new Intl.DateTimeFormat("en-CA").format( new Date(activity.date))}
+  </button>
+))}
             </div>
           </div>
 
@@ -207,11 +134,11 @@ const Index = () => {
                     <FaCalendar className="ml-2 w-6 h-6" />
                     <h2 className="text-xl font-bold">
                       {" "}
-                      {
-                        new Date(selectedActivity.date)
-                          .toISOString()
-                          .split("T")[0]
-                      }
+                      {/* {
+                       
+                          
+                          new Intl.DateTimeFormat("en-CA").format( new Date(selectedActivity.date))
+                      } */}
                     </h2>
                   </div>
                   <div className="flex items-center">

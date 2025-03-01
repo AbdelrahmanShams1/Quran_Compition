@@ -48,6 +48,8 @@ const Home = () => {
   const [userEmail,setUserEmail] =useState("")
   const [previousPoints,setPreviousPoints] =useState(0)
   let storedUser = localStorage.getItem("loggedInUser");
+  const [modifyData ,setModifyData] = useState({})
+  const lastRecord=0
   const [activitiesPoints, setActivitiesPoints] = useState({
     data: {
       date: "",
@@ -85,7 +87,7 @@ const Home = () => {
         prayFor: false,
         points: 0,
       },
-      totalPoints: 0,
+      totalPointsPerDay: 0,
       
     },
   });
@@ -103,7 +105,7 @@ const Home = () => {
   }, []);
 
   async function handleSaveData() {
-    const todayDate = new Date().toISOString();
+    const todayDate = new Date();
     const data = {
         date: todayDate,
         fajr: {
@@ -215,21 +217,34 @@ const Home = () => {
 
    
     const totalPoints = previousPoints + newPoints;
-    data.totalPoints = newPoints;
-   
+    data.totalPointsPerDay = newPoints;
+    
     localStorage.setItem("totalPoints", JSON.stringify(totalPoints));
-
+    let dateActiv = new Date();
+    let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
+    console.log(formattedDate);
+    console.log(todayDate.toISOString().split("T")[0])
 
     try {
+      const parsedUser = JSON.parse(storedUser);
+    
+      // Check if data exists for the date
+      if (!parsedUser.activities[formattedDate]) {
         setActivitiesPoints({ data });
+    
         const userRef = doc(db, "users", userEmail);
         await updateDoc(userRef, {
-            activities: arrayUnion(data),
-            totalPoints: totalPoints,
+          [`activities.${formattedDate}`]: data,
+          totalPoints: totalPoints,
         });
-        navigate("/Quran_Compition/standing")
+    
         console.log("تم حفظ البيانات وتحديث النقاط بنجاح في Firestore");
-    } catch (error) {
+        navigate("/Quran_Compition/standing");
+      } else {
+        console.log("تم العثور على البيانات بالفعل، لن يتم الإضافة");
+      }
+    }
+     catch (error) {
         console.error("خطأ في حفظ البيانات:", error);
     }
 }
