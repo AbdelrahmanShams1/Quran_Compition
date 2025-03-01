@@ -15,7 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import { useRef , useState ,useEffect } from "react";
 import { db } from "../firebase";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -50,6 +50,13 @@ const Home = () => {
   let storedUser = localStorage.getItem("loggedInUser");
   const [modifyData ,setModifyData] = useState({})
   const lastRecord=0
+  const [activitiesHistory, setActivitiesHistory] = useState({});
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [totalPoints, setTotalPoints] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+
+  
   const [activitiesPoints, setActivitiesPoints] = useState({
     data: {
       date: "",
@@ -63,6 +70,7 @@ const Home = () => {
       taraweeh: { type: "", numOfPray: 0, witr: false, points: 0 },
       tahajjud: { numOfPray: 0, points: 0 },
       rawatib: { numOfPray: 0, points: 0 },
+      try: -1,
       adhkar: {
         morning: false,
         evening: false,
@@ -100,8 +108,31 @@ const Home = () => {
       setUserGender(parsedUser.type);
       setUserEmail(parsedUser.email);
       setPreviousPoints(points>parsedUser.totalPoints? +points : +parsedUser.totalPoints )
-      
     }
+    let dateActiv = new Date();
+    let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
+    const fetchData = async () => {
+      try {
+        const userRef = doc(db, "users", "aboda1"); // استبدل "aboda1" بالبريد الإلكتروني الفعلي
+        const userDoc = await getDoc(userRef);
+        
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setTotalPoints(userData.totalPoints || 0);
+          setActivitiesHistory(userData.activities || {});
+          setSelectedDate(Object.keys(userData.activities)[0]); // تعيين أول تاريخ كقيمة افتراضية
+          console.log(userData.activities[formattedDate]);
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   async function handleSaveData() {
@@ -220,10 +251,7 @@ const Home = () => {
     data.totalPointsPerDay = newPoints;
     
     localStorage.setItem("totalPoints", JSON.stringify(totalPoints));
-    let dateActiv = new Date();
-    let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
-    console.log(formattedDate);
-    console.log(todayDate.toISOString().split("T")[0])
+
 
     try {
       const parsedUser = JSON.parse(storedUser);

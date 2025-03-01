@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import {
   FaArrowRight,
   FaCalendar,
@@ -11,6 +9,8 @@ import {
   FaSun,
   FaBolt,
 } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -25,12 +25,13 @@ const Index = () => {
       try {
         const userRef = doc(db, "users", "aboda1"); // استبدل "aboda1" بالبريد الإلكتروني الفعلي
         const userDoc = await getDoc(userRef);
-
+        
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setTotalPoints(userData.totalPoints || 0);
           setActivitiesHistory(userData.activities || {});
           setSelectedDate(Object.keys(userData.activities)[0]); // تعيين أول تاريخ كقيمة افتراضية
+          console.log(activitiesHistory);
         } else {
           console.log("No such document!");
         }
@@ -42,6 +43,7 @@ const Index = () => {
     };
 
     fetchData();
+    
   }, []);
 
   const handleDateSelect = (date) => {
