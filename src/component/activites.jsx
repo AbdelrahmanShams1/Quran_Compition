@@ -19,11 +19,12 @@ const Index = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [totalPoints, setTotalPoints] = useState(0);
-
+  let storedUser = localStorage.getItem("loggedInUser");
+  const em= JSON.parse(storedUser).email
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userRef = doc(db, "users", "aboda1"); // استبدل "aboda1" بالبريد الإلكتروني الفعلي
+        const userRef = doc(db, "users", em); // استبدل "aboda1" بالبريد الإلكتروني الفعلي
         const userDoc = await getDoc(userRef);
         
         if (userDoc.exists()) {

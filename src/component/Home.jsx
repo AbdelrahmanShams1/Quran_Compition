@@ -47,13 +47,14 @@ const Home = () => {
   const [userGender, setUserGender] = useState("");
   const [userEmail,setUserEmail] =useState("")
   const [previousPoints,setPreviousPoints] =useState(0)
-  let storedUser = localStorage.getItem("loggedInUser");
   const [modifyData ,setModifyData] = useState({});
   const [lastRecord, setLastRecord] = useState(0);
   const [activitiesHistory, setActivitiesHistory] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
   const [totalPoints, setTotalPoints] = useState(0);
   const [loading, setLoading] = useState(true);
+  let storedUser = localStorage.getItem("loggedInUser");
+  const em= JSON.parse(storedUser).email
   let dateActiv = new Date();
   let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
   
@@ -96,6 +97,7 @@ const Home = () => {
         points: 0,
       },
       totalPointsPerDay: 0,
+     
       
     },
   });
@@ -107,18 +109,19 @@ const Home = () => {
       const parsedUser = JSON.parse(storedUser);
       setUserGender(parsedUser.type);
       setUserEmail(parsedUser.email);
-      setPreviousPoints(points>parsedUser.totalPoints? +points : +parsedUser.totalPoints )
+     
     }
 
     const fetchData = async () => {
       try {
-        const userRef = doc(db, "users", "aboda1"); // استبدل "aboda1" بالبريد الإلكتروني الفعلي
+        const userRef = doc(db, "users",em); // استبدل "aboda1" بالبريد الإلكتروني الفعلي
         const userDoc = await getDoc(userRef);
         
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setModifyData(userData);
           setTotalPoints(userData.totalPoints || 0);
+          setLastRecord(userData.lastRecord)
           setActivitiesHistory(userData.activities || {});
           setSelectedDate(Object.keys(userData.activities)[0]); // تعيين أول تاريخ كقيمة افتراضية
         } else {
@@ -255,6 +258,7 @@ const Home = () => {
 
       
     data.totalPointsPerDay = newPoints;
+    data.lastRecord = newPoints;
     localStorage.setItem("totalPoints", JSON.stringify(totalPoints));
 
 
@@ -263,22 +267,29 @@ const Home = () => {
       // Check if data exists for the date
       if (!modifyData.activities[formattedDate]) {
         setActivitiesPoints({ data });
-        setTotalPoints(data.totalPointsPerDay);
+        const num = data.totalPointsPerDay + totalPoints
               await updateDoc(userRef, {
                 [`activities.${formattedDate}`]: data,
-                totalPoints: data.totalPointsPerDay,
+                totalPoints: num,
+                lastRecord:newPoints
               });
+             
         console.log("تم حفظ البيانات وتحديث النقاط بنجاح في Firestore");
         navigate("/Quran_Compition/standing");
       } else {
+        setLastRecord(modifyData.lastRecord)
+        console.log("last",totalPoints, lastRecord,newPoints)
+        const num=totalPoints - lastRecord + newPoints
+        setTotalPoints(num);
+        console.log("last",totalPoints, lastRecord,newPoints)
         setActivitiesPoints({ data });
-        setTotalPoints(totalPoints - lastRecord + newPoints);
-
         await updateDoc(userRef, {
           [`activities.${formattedDate}`]: data,
-          totalPoints: totalPoints,
+          totalPoints: num,
+          lastRecord:newPoints
         });
         console.log("تم العثور على البيانات بالفعل، لن يتم الإضافة");
+        navigate("/Quran_Compition/standing");
       }
     }
      catch (error) {
@@ -360,6 +371,7 @@ const Home = () => {
                           ref={prayer.salahRef}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md"
                         >
+                           <option value={0}>لم يتم الصلاه (0 نقطة)</option>
                           <option value={1000}>
                             جماعة في المسجد (1000 نقطة)
                           </option>
@@ -372,6 +384,8 @@ const Home = () => {
                           ref={prayer.salahRef}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md"
                         >
+                           
+                          <option value={0}>لم يتم الصلاه (0 نقطة)</option>
                           <option value={900}>في الوقت (900 نقطة)</option>
                           <option value={300}>متأخر (300 نقطة)</option>
                           <option value={100}>قضاء (100 نقطة)</option>
