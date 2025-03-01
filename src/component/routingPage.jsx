@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import fanous from "../assets/fanous.svg";
 
 const RoutingPage = () => {
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const user = localStorage.getItem("loggedInUser");
@@ -13,9 +14,27 @@ const RoutingPage = () => {
       setName(parsedUser.name);
     }
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
+    setName("");
+    navigate("/Quran_Compition/login"); // توجيه المستخدم إلى الصفحة الرئيسية بعد تسجيل الخروج
+  };
+
   console.log(name);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-800 via-purple-700 to-indigo-900 text-center p-4">
+      {/* زر تسجيل الخروج في الأعلى */}
+      <div className="absolute top-4 right-4">
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg shadow hover:bg-red-700 transition transform hover:scale-105 flex items-center justify-center"
+        >
+          <span className="ml-2">🚪</span>
+          تسجيل الخروج
+        </button>
+      </div>
+
       <div className="text-yellow-400 animate-pulse">
         <img
           src={fanous}
