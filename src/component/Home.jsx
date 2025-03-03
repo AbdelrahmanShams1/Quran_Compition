@@ -139,7 +139,9 @@ const Home = () => {
 
   async function handleSaveData() {
     let dateActiv = new Date();
+   // let dateActiv = "2025-03-01";
     let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
+   // let formattedDate = dateActiv;
     const todayDate = new Date();
 
     const data = {
@@ -147,7 +149,7 @@ const Home = () => {
         fajr: {
             type: fajrRef.current.value == 1000 ? "في المسجد"
                 : fajrRef.current.value == 900 && userGender == "female" ? "عذر قهري "
-                : fajrRef.current.value == 900 ? "في الوقت"
+                : fajrRef.current.value == 910 ? "في الوقت"
                 : fajrRef.current.value == 700 ? "حاضر"
                 : fajrRef.current.value == 300 ? "تأخير "
                 : fajrRef.current.value == 100 ? "قضاء " : "لم يحدد",
@@ -157,7 +159,7 @@ const Home = () => {
         dhuhr: {
             type: dhuhrRef.current.value == 1000 ? "في المسجد"
                 : dhuhrRef.current.value == 900 && userGender == "female" ? "عذر قهري "
-                : dhuhrRef.current.value == 900 ? "في الوقت"
+                : dhuhrRef.current.value == 910 ? "في الوقت"
                 : dhuhrRef.current.value == 700 ? "حاضر"
                 : dhuhrRef.current.value == 300 ? "تأخير "
                 : dhuhrRef.current.value == 100 ? "قضاء " : "لم يحدد",
@@ -167,7 +169,7 @@ const Home = () => {
         asr: {
             type: asrRef.current.value == 1000 ? "في المسجد"
                 : asrRef.current.value == 900 && userGender == "female" ? "عذر قهري "
-                : asrRef.current.value == 900 ? "في الوقت"
+                : asrRef.current.value == 910 ? "في الوقت"
                 : asrRef.current.value == 700 ? "حاضر"
                 : asrRef.current.value == 300 ? "تأخير "
                 : asrRef.current.value == 100 ? "قضاء " : "لم يحدد",
@@ -177,7 +179,7 @@ const Home = () => {
         maghrib: {
             type: maghribRef.current.value == 1000 ? "في المسجد"
                 : maghribRef.current.value == 900 && userGender == "female" ? "عذر قهري "
-                : maghribRef.current.value == 900 ? "في الوقت"
+                : maghribRef.current.value == 910 ? "في الوقت"
                 : maghribRef.current.value == 700 ? "حاضر"
                 : maghribRef.current.value == 300 ? "تأخير "
                 : maghribRef.current.value == 100 ? "قضاء " : "لم يحدد",
@@ -187,7 +189,7 @@ const Home = () => {
         isha: {
             type: ishaRef.current.value == 1000 ? "في المسجد"
                 : ishaRef.current.value == 900 && userGender == "female" ? "عذر قهري "
-                : ishaRef.current.value == 900 ? "في الوقت"
+                : ishaRef.current.value == 910 ? "في الوقت"
                 : ishaRef.current.value == 700 ? "حاضر"
                 : ishaRef.current.value == 300 ? "تأخير "
                 : ishaRef.current.value == 100 ? "قضاء " : "لم يحدد",
@@ -386,7 +388,7 @@ const Home = () => {
                         >
                            
                           <option value={0}>لم يتم الصلاه (0 نقطة)</option>
-                          <option value={900}>في الوقت (900 نقطة)</option>
+                          <option value={910}>في الوقت (910 نقطة)</option>
                           <option value={300}>متأخر (300 نقطة)</option>
                           <option value={100}>قضاء (100 نقطة)</option>
                           <option value={900}>عذر قهري (900 نقطة)</option>
