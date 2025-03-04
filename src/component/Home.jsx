@@ -139,8 +139,8 @@ const Home = () => {
 
   async function handleSaveData() {
     let dateActiv = new Date();
-   // let dateActiv = "2025-03-01";
-    let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
+   // let dateActiv = "2025-03-03";
+   let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
    // let formattedDate = dateActiv;
     const todayDate = new Date();
 
@@ -520,7 +520,7 @@ const Home = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none"
               />
               <span className="text-sm text-gray-500 block mt-1">
-                * تشمل سنن الفجر (2 ركعة)، سنن الظهر (2+2 ركعة)، سنن المغرب (2 ركعة)، سنن العشاء (2 ركعة)
+                * تشمل سنن الفجر (2 ركعة)، سنن الظهر (2+4 ركعة)، سنن المغرب (2 ركعة)، سنن العشاء (2 ركعة)
               </span>
             </div>
           </div>
