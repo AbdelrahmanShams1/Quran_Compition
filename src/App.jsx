@@ -14,6 +14,7 @@ import Question from "./component/Question";
 import RoutingPage from "./component/routingPage";
 import Activity from "./component/activites";
 import Azkar from "./component/Azkar";
+import Master from "./component/master";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="Quran_Compition/routinPage" element={<RoutingPage />} />
         <Route path="Quran_Compition/activity" element={<Activity />} />
         <Route path="Quran_Compition/azkar" element={<Azkar />} />
+        <Route path="Quran_Compition/master" element={<Master />} />
       </>
     )
   );

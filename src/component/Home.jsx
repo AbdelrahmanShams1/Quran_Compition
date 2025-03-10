@@ -45,8 +45,7 @@ const Home = () => {
   const funeralRef = useRef();
   const prayForRef = useRef();
   const [userGender, setUserGender] = useState("");
-  const [userEmail,setUserEmail] =useState("")
-  const [previousPoints,setPreviousPoints] =useState(0)
+  const [userEmail,setUserEmail] =useState("");
   const [modifyData ,setModifyData] = useState({});
   const [lastRecord, setLastRecord] = useState(0);
   const [activitiesHistory, setActivitiesHistory] = useState({});
@@ -138,10 +137,11 @@ const Home = () => {
   }, []);
 
   async function handleSaveData() {
-    let dateActiv = new Date();
-   // let dateActiv = "2025-03-03";
+   let dateActiv = new Date();
+ //  let dateActiv = "2025-03-08";
    let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
    // let formattedDate = dateActiv;
+  // let formattedDate = dateRef.current.value;
     const todayDate = new Date();
 
     const data = {
@@ -344,7 +344,8 @@ const Home = () => {
               التعليمات والشروط
             </Link>
           </div>
-
+          
+         
           <div className="bg-indigo-50 p-4 rounded-lg">
             <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
               <FaCheckCircle className="ml-2" />
@@ -430,6 +431,28 @@ const Home = () => {
             </div>
           </div>
 
+          <div className="bg-indigo-50 p-4 rounded-lg">
+            <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+              <FaPray className="ml-2" />
+              السنن الرواتب
+            </h2>
+            <div>
+              <label className="block text-gray-700 mb-2">
+                عدد ركعات السنن الرواتب (40 نقطة لكل ركعة):
+              </label>
+              <input
+                ref={rawatibPrayersRef}
+                type="number"
+                min="0"
+                max="12"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none"
+              />
+              <span className="text-sm text-gray-500 block mt-1">
+                * تشمل سنن الفجر (2 ركعة)، سنن الظهر (2+4 ركعة)، سنن المغرب (2 ركعة)، سنن العشاء (2 ركعة)
+              </span>
+            </div>
+          </div>
+
           <div className="bg-amber-50 p-4 rounded-lg">
             <h2 className="text-xl font-bold text-amber-800 mb-4 flex items-center">
               <FaSun className="ml-2" />
@@ -503,27 +526,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="bg-orange-50 p-4 rounded-lg">
-            <h2 className="text-xl font-bold text-orange-800 mb-4 flex items-center">
-              <FaPray className="ml-2" />
-              السنن الرواتب
-            </h2>
-            <div>
-              <label className="block text-gray-700 mb-2">
-                عدد ركعات السنن الرواتب (40 نقطة لكل ركعة):
-              </label>
-              <input
-                ref={rawatibPrayersRef}
-                type="number"
-                min="0"
-                max="12"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none"
-              />
-              <span className="text-sm text-gray-500 block mt-1">
-                * تشمل سنن الفجر (2 ركعة)، سنن الظهر (2+4 ركعة)، سنن المغرب (2 ركعة)، سنن العشاء (2 ركعة)
-              </span>
-            </div>
-          </div>
+         
 
           <div className="bg-teal-50 p-4 rounded-lg">
             <h2 className="text-xl font-bold text-teal-800 mb-4 flex items-center">
