@@ -4,6 +4,7 @@ import fanous from "../assets/fanous.svg";
 
 const RoutingPage = () => {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,6 +13,7 @@ const RoutingPage = () => {
       const parsedUser = JSON.parse(user);
       console.log(parsedUser);
       setName(parsedUser.name);
+      setEmail(parsedUser.email);
     }
   }, []);
 
@@ -20,7 +22,8 @@ const RoutingPage = () => {
     setName("");
     navigate("/Quran_Compition/login"); // توجيه المستخدم إلى الصفحة الرئيسية بعد تسجيل الخروج
   };
-
+  const targetPath = email === "Mo.elneny@gmail.com" ? "/Quran_Compition/master" : "/Quran_Compition/home";
+  console.log(email);
   console.log(name);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-800 via-purple-700 to-indigo-900 text-center p-4">
@@ -61,12 +64,13 @@ const RoutingPage = () => {
         </Link>
 
         <Link
-          className="px-6 py-4 text-lg bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700 transition transform hover:scale-105 flex items-center justify-center"
-          to={"/Quran_Compition/home"}
-        >
-          <span className="ml-2">📝</span>
-          إدخال أنشطة اليوم
-        </Link>
+  className="px-6 py-4 text-lg bg-green-600 text-white rounded-xl shadow-lg hover:bg-green-700 transition transform hover:scale-105 flex items-center justify-center"
+  to={targetPath}
+>
+  <span className="ml-2">📝</span>
+  إدخال أنشطة اليوم
+</Link>
+
 
         <Link
           className="px-6 py-4 text-lg bg-yellow-600 text-white rounded-xl shadow-lg hover:bg-yellow-700 transition transform hover:scale-105 flex items-center justify-center"
