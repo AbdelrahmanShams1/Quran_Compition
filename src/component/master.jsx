@@ -610,11 +610,14 @@ const AdminDataEditor = () => {
                                 className="w-full px-4 py-2 border border-gray-300 rounded-md"
                               >
                                 <option value={0}>لم يتم الصلاه (0 نقطة)</option>
+                                <option value={1000}>
+                                  جماعة في المسجد (1000 نقطة)
+                                </option>
                                 <option value={910}>في الوقت (910 نقطة)</option>
                                 <option value={300}>متأخر (300 نقطة)</option>
                                 <option value={100}>قضاء (100 نقطة)</option>
                                 <option value={900}>عذر قهري (900 نقطة)</option>
-                                <option value={700}>حاضر (700 نقطة)</option>
+                              
                                 <option value={300}>متأخر (300 نقطة)</option>
                                 <option value={100}>قضاء (100 نقطة)</option>
                               </select>
