@@ -8,13 +8,14 @@ import Login from "./component/Login";
 import SignUp from "./component/SignUp";
 import Home from "./component/Home";
 import Instructions from "./component/Instructions";
-import Welcome from "./component/welcome";
+import Welcome from "./component/Welcome";
 import Standing from "./component/Standing";
 import Question from "./component/Question";
 import RoutingPage from "./component/routingPage";
 import Activity from "./component/activites";
 import Azkar from "./component/Azkar";
 import Master from "./component/master";
+import Khatma from "./component/khatma";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -31,6 +32,7 @@ const App = () => {
         <Route path="Quran_Compition/activity" element={<Activity />} />
         <Route path="Quran_Compition/azkar" element={<Azkar />} />
         <Route path="Quran_Compition/master" element={<Master />} />
+        <Route path="Quran_Compition/khatma" element={<Khatma />} />
       </>
     )
   );
