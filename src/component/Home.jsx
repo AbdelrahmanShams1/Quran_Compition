@@ -137,10 +137,10 @@ const Home = () => {
   }, []);
 
   async function handleSaveData() {
- //  let dateActiv = new Date();
-  let dateActiv = "2025-03-08";
-  // let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
-    let formattedDate = dateActiv;
+   let dateActiv = new Date();
+ // let dateActiv = "2025-03-08";
+ let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
+   // let formattedDate = dateActiv;
   // let formattedDate = dateRef.current.value;
     const todayDate = new Date();
 
