@@ -14,7 +14,7 @@ const RoutingPage = () => {
       console.log(parsedUser);
       setName(parsedUser.name);
       setEmail(parsedUser.email);
-      alert("تم اضافة دعاء ختم القراءن في الموقع ");
+      alert("تم اضافة الاعتكاف والعمرهوالحج في الانشطه اللي هتدخلها بدايه من مغرب الاربع  ");
     }
   }, []);
 

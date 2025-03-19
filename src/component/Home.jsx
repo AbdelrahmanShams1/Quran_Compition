@@ -123,7 +123,7 @@ const Home = () => {
 
     const fetchData = async () => {
       try {
-        const userRef = doc(db, "users",em); // استبدل "aboda1" بالبريد الإلكتروني الفعلي
+        const userRef = doc(db, "users",em); 
         const userDoc = await getDoc(userRef);
         
         if (userDoc.exists()) {
