@@ -8,8 +8,7 @@ import {
   FaCheckCircle,
   FaInfoCircle,
   FaBolt,
-  FaQuestionCircle,
-  FaArrowLeft,
+  FaKaaba,
   FaPray
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -44,6 +43,9 @@ const Home = () => {
   const charityRef = useRef();
   const funeralRef = useRef();
   const prayForRef = useRef();
+  const etkaf = useRef();
+  const omra = useRef();
+ 
   const [userGender, setUserGender] = useState("");
   const [userEmail,setUserEmail] =useState("");
   const [modifyData ,setModifyData] = useState({});
@@ -86,6 +88,14 @@ const Home = () => {
         answer: "",
         points: 0, 
         date: "", 
+      },
+      Omra:{
+        omraBoolian: false,
+        points: 0,
+      },
+      etkaf:{
+        etkafTime: 0,
+        points: 0,
       },
       extra: {
         iftar: 0,
@@ -236,6 +246,7 @@ const Home = () => {
       try:  activitiesHistory[formattedDate]?.try !== undefined 
       ? activitiesHistory[formattedDate].try + 1 
       : 0,
+      
         extra: {
             iftar: +iftarRef.current.value,
             visitPatient: visitPatientRef.current.checked,
@@ -248,6 +259,14 @@ const Home = () => {
                 (funeralRef.current.checked ? 200 : 0) +
                 (prayForRef.current.checked ? 200 : 0),
         },
+        Omra:{
+          omraBoolian: omra.current.checked,
+          points: +omra.current.checked ? 600 : 100,
+        },
+        Iktaf:{
+          etkafTime: +etkaf.current.value,
+          points: +etkaf.current.value ,
+        },
     };
     const userRef = doc(db, "users", userEmail);
 
@@ -256,7 +275,7 @@ const Home = () => {
     const newPoints = data.fajr.points + data.dhuhr.points + data.asr.points +
         data.maghrib.points + data.isha.points + data.quran.points +
         data.duha.points + data.taraweeh.points + data.tahajjud.points +
-        data.rawatib.points + data.adhkar.points + data.extra.points;
+        data.rawatib.points + data.adhkar.points + data.extra.points + data.Omra.points + data.Iktaf.points;
 
       
     data.totalPointsPerDay = newPoints;
@@ -525,7 +544,54 @@ const Home = () => {
               />
             </div>
           </div>
+    
+          <div className="bg-purple-50 p-4 rounded-lg">
+  <h2 className="text-xl font-bold text-purple-800 mb-4 flex items-center">
+    <FaKaaba className="ml-2" />
+    العمره والحج
+  </h2>
+  <div className="flex items-center">
+    <input
+      type="checkbox"
+      id="eveningAdhkar"
+      ref={omra}
+      className="ml-2 h-5 w-5"
+    />
+    <label htmlFor="eveningAdhkar" className="text-gray-700">
+      تمت  (600 نقطة)
+    </label>
+  </div>
+  <span className="text-sm text-red-500 block mt-4">
+    * عن النبي صلى الله عليه وسلم أنه قال: من صلى صلاة الغداة في جماعة ثم
+    جلس يذكر الله حتى تطلع الشمس ثم قام فصلى ركعتين انقلب بأجر حجة وعمرة.
+    رواه الطبراني، وقال الألباني إسناده جيد.
+  </span>
+</div> 
 
+<div className="bg-green-50 p-4 rounded-lg">
+  <h2 className="text-xl font-bold text-green-800 mb-4 flex items-center">
+    <FaBookOpen className="ml-2" />
+    الاعتكاف
+  </h2>
+  <div>
+    <label className="block text-gray-700 mb-2">مدة الاعتكاف (بالدقائق):</label>
+    <select
+      ref={etkaf}
+      className="outline-none w-full px-4 py-2 border border-gray-300 rounded-md bg-white"
+    >
+      <option value={100}>30 دقيقة (100 نقطة)</option>
+      <option value={200}>ساعة (200 نقطة)</option>
+      <option value={300}>ساعة ونصف (300 نقطة)</option>
+      <option value={400}>ساعتان (400 نقطة)</option>
+      <option value={500}>ساعتان ونصف (500 نقطة)</option>
+      <option value={600}>ثلاث ساعات (600 نقطة)</option>
+      <option value={700}>ثلاث ساعات ونصف (700 نقطة)</option>
+      <option value={800}>أربع ساعات (800 نقطة)</option>
+      <option value={900}>أربع ساعات ونصف (900 نقطة)</option>
+      <option value={1000}>خمس ساعات (1000 نقطة)</option>
+    </select>
+  </div>
+</div>
          
 
           <div className="bg-teal-50 p-4 rounded-lg">
