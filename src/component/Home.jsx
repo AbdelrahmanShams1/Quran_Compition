@@ -579,6 +579,7 @@ const Home = () => {
       ref={etkaf}
       className="outline-none w-full px-4 py-2 border border-gray-300 rounded-md bg-white"
     >
+      <option value={0}>لم انتظر (0)</option>
       <option value={100}>30 دقيقة (100 نقطة)</option>
       <option value={200}>ساعة (200 نقطة)</option>
       <option value={300}>ساعة ونصف (300 نقطة)</option>
