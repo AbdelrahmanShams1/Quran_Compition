@@ -14,7 +14,8 @@ import {
   FaPray,
   FaUser,
   FaEdit,
-  FaTrash
+  FaTrash,
+  FaKaaba,
 } from "react-icons/fa";
 import { useRef, useState, useEffect } from "react";
 import { db } from "../firebase";
@@ -48,7 +49,9 @@ const AdminDataEditor = () => {
   const charityRef = useRef();
   const funeralRef = useRef();
   const prayForRef = useRef();
-  
+  const omraRef = useRef(); // إضافة حقل العمرة
+  const etkafRef = useRef(); // إضافة حقل الاعتكاف
+
   // Admin states
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
@@ -196,6 +199,10 @@ const AdminDataEditor = () => {
     if (charityRef.current) charityRef.current.checked = data.extra?.charity || false;
     if (funeralRef.current) funeralRef.current.checked = data.extra?.funeral || false;
     if (prayForRef.current) prayForRef.current.checked = data.extra?.prayFor || false;
+
+    // Fill Omra and Etkaf
+    if (omraRef.current) omraRef.current.checked = data.Omra?.omraBoolian || false;
+    if (etkafRef.current) etkafRef.current.value = data.etkaf?.etkafTime || 0;
   };
 
   // Handle save data
@@ -309,13 +316,22 @@ const AdminDataEditor = () => {
                 (funeralRef.current.checked ? 200 : 0) +
                 (prayForRef.current.checked ? 200 : 0),
         },
+        Omra: {
+          omraBoolian: omraRef.current.checked,
+          points: omraRef.current.checked ? 600 : 0,
+        },
+        etkaf: {
+          etkafTime: +etkafRef.current.value,
+          points: +etkafRef.current.value,
+        },
       };
 
       // Calculate total points for this day
       const newDailyPoints = data.fajr.points + data.dhuhr.points + data.asr.points +
           data.maghrib.points + data.isha.points + data.quran.points +
           data.duha.points + data.taraweeh.points + data.tahajjud.points +
-          data.rawatib.points + data.adhkar.points + data.extra.points;
+          data.rawatib.points + data.adhkar.points + data.extra.points +
+          data.Omra.points + data.etkaf.points;
 
       data.totalPointsPerDay = newDailyPoints;
       
@@ -617,9 +633,6 @@ const AdminDataEditor = () => {
                                 <option value={300}>متأخر (300 نقطة)</option>
                                 <option value={100}>قضاء (100 نقطة)</option>
                                 <option value={900}>عذر قهري (900 نقطة)</option>
-                              
-                                <option value={300}>متأخر (300 نقطة)</option>
-                                <option value={100}>قضاء (100 نقطة)</option>
                               </select>
                             )}
                           </div>
@@ -877,6 +890,40 @@ const AdminDataEditor = () => {
                       <label className="mr-2 text-gray-700">
                         الدعاء للآخرين (200 نقطة)
                       </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Omra and Etkaf Section */}
+                <div className="bg-indigo-50 p-4 rounded-lg">
+                  <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
+                    <FaKaaba className="ml-2" />
+                    العمرة والاعتكاف
+                  </h2>
+                  
+                  <div className="bg-white rounded-lg p-4 shadow-sm space-y-4">
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        ref={omraRef}
+                        className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                      />
+                      <label className="mr-2 text-gray-700">
+                        أداء العمرة (600 نقطة)
+                      </label>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-gray-700 mb-2">
+                        مدة الاعتكاف (بالساعات):
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        ref={etkafRef}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                        placeholder="عدد الساعات (100 نقطة لكل ساعة)"
+                      />
                     </div>
                   </div>
                 </div>

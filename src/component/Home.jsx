@@ -261,7 +261,7 @@ const Home = () => {
         },
         Omra:{
           omraBoolian: omra.current.checked,
-          points: +omra.current.checked ? 600 : 100,
+          points: +omra.current.checked ? 600 : 0,
         },
         Iktaf:{
           etkafTime: +etkaf.current.value,
