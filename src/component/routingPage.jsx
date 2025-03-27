@@ -85,7 +85,7 @@ const RoutingPage = () => {
 
         <Link
           className="px-6 py-4 text-lg bg-purple-600 text-white rounded-xl shadow-lg hover:bg-purple-700 transition transform hover:scale-105 flex items-center justify-center"
-          to={"/Quran_Compition/home"}
+          to={"/Quran_Compition/routinPage"}
         >
           <span className="ml-2">🏆</span>
           الترتيب
