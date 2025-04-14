@@ -15,7 +15,12 @@ export default function Welcome() {
       </p>
 
       <div className="mt-6 flex gap-4">
-       
+      <Link
+          className="px-4 py-3 text-sm sm:text-lg sm:px-6 bg-blue-600 text-white rounded-2xl shadow-lg hover:bg-blue-700 transition"
+          to={"/Quran_Compition/signup"}
+        >
+          أنشئ حسابًا جديدًا 🚀
+        </Link>
         <Link
           className="px-4 py-3 text-sm sm:text-lg sm:px-6 bg-green-600 text-white rounded-2xl shadow-lg hover:bg-green-700 transition"
           to={"/Quran_Compition/login"}

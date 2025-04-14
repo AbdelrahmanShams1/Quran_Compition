@@ -296,7 +296,7 @@ const Home = () => {
               });
              
         console.log("تم حفظ البيانات وتحديث النقاط بنجاح في Firestore");
-        navigate("/Quran_Compition/routinPage");
+        navigate("/Quran_Compition/standing");
       } else {
         setLastRecord(modifyData.lastRecord)
         console.log("last",totalPoints, lastRecord,newPoints)

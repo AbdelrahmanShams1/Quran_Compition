@@ -26,13 +26,15 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (email=='admin' || password=='admin123') {
+      navigate("/Quran_Compition/master");
+    }
     const user = users.find(
       (user) => user.email === email && user.password === password
     );
     if (user) {
       localStorage.setItem("loggedInUser", JSON.stringify(user));
-      localStorage.setItem("totalPoints", 0);
-      
+      localStorage.setItem("totalPoints", 0);  
       navigate("/Quran_Compition/routinPage");
     } else {
       setError("إيميل أو كلمة مرور غير صحيحة");
@@ -79,7 +81,12 @@ const Login = () => {
             <FaSignInAlt className="ml-2 w-4 h-4" />
             تسجيل الدخول
           </button>
-          
+          <Link
+            to="/Quran_Compition/signup"
+            className="text-indigo-500 hover:underline text-lg text-center block"
+          >
+            التسجيل بحساب جديد
+          </Link>
         </form>
       </div>
     </div>

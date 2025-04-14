@@ -16,7 +16,7 @@ const RoutingPage = () => {
       setEmail(parsedUser.email);
      
     }
-    alert("الترتيب اختبفي بحيث ان كل واحد يشد حيله اكتر ومحدش يعرف نقط التاني");
+   
   }, []);
 
  
@@ -26,7 +26,7 @@ const RoutingPage = () => {
     setName("");
     navigate("/Quran_Compition/login"); 
   };
-  const targetPath = email === "Mo.elneny@gmail.com" ? "/Quran_Compition/master" : "/Quran_Compition/home";
+  const targetPath = "/Quran_Compition/home";
   console.log(email);
   console.log(name);
   return (
@@ -85,7 +85,7 @@ const RoutingPage = () => {
 
         <Link
           className="px-6 py-4 text-lg bg-purple-600 text-white rounded-xl shadow-lg hover:bg-purple-700 transition transform hover:scale-105 flex items-center justify-center"
-          to={"/Quran_Compition/routinPage"}
+          to={"/Quran_Compition/standing"}
         >
           <span className="ml-2">🏆</span>
           الترتيب

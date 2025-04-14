@@ -85,7 +85,7 @@ const Question = () => {
       });
       console.log("تم حفظ الإجابة بنجاح في Firestore");
       console.log(dataOfQuetion);
-      navigate("/Quran_Compition/routinPage");
+      navigate("/Quran_Compition/standing");
     } catch (error) {
       console.error("خطأ في حفظ الإجابة:", error);
     }
