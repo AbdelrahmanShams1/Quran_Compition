@@ -9,10 +9,10 @@ import {
   FaInfoCircle,
   FaBolt,
   FaKaaba,
-  FaPray
+  FaPray,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useRef , useState ,useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { db } from "../firebase";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 
@@ -45,20 +45,20 @@ const Home = () => {
   const prayForRef = useRef();
   const etkaf = useRef();
   const omra = useRef();
- 
+
   const [userGender, setUserGender] = useState("");
-  const [userEmail,setUserEmail] =useState("");
-  const [modifyData ,setModifyData] = useState({});
+  const [userEmail, setUserEmail] = useState("");
+  const [modifyData, setModifyData] = useState({});
   const [lastRecord, setLastRecord] = useState(0);
   const [activitiesHistory, setActivitiesHistory] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
   const [totalPoints, setTotalPoints] = useState(0);
   const [loading, setLoading] = useState(true);
   let storedUser = localStorage.getItem("loggedInUser");
-  const em= JSON.parse(storedUser).email
+  const em = JSON.parse(storedUser).email;
   let dateActiv = new Date();
   let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
-  
+
   const [activitiesPoints, setActivitiesPoints] = useState({
     data: {
       date: "",
@@ -78,22 +78,22 @@ const Home = () => {
         evening: false,
         general: 0,
         points: 0,
-      }, 
+      },
       rawatib: {
         numOfPray: 0,
         points: 0,
       },
-      questionData : {
+      questionData: {
         question: "",
         answer: "",
-        points: 0, 
-        date: "", 
+        points: 0,
+        date: "",
       },
-      Omra:{
+      Omra: {
         omraBoolian: false,
         points: 0,
       },
-      etkaf:{
+      etkaf: {
         etkafTime: 0,
         points: 0,
       },
@@ -106,8 +106,6 @@ const Home = () => {
         points: 0,
       },
       totalPointsPerDay: 0,
-     
-      
     },
   });
 
@@ -118,19 +116,18 @@ const Home = () => {
       const parsedUser = JSON.parse(storedUser);
       setUserGender(parsedUser.type);
       setUserEmail(parsedUser.email);
-     
     }
 
     const fetchData = async () => {
       try {
-        const userRef = doc(db, "users",em); 
+        const userRef = doc(db, "users", em);
         const userDoc = await getDoc(userRef);
-        
+
         if (userDoc.exists()) {
           const userData = userDoc.data();
           setModifyData(userData);
           setTotalPoints(userData.totalPoints || 0);
-          setLastRecord(userData.lastRecord)
+          setLastRecord(userData.lastRecord);
           setActivitiesHistory(userData.activities || {});
           setSelectedDate(Object.keys(userData.activities)[0]); // تعيين أول تاريخ كقيمة افتراضية
         } else {
@@ -147,176 +144,242 @@ const Home = () => {
   }, []);
 
   async function handleSaveData() {
-   let dateActiv = new Date();
- // let dateActiv = "2025-03-08";
- let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
-   // let formattedDate = dateActiv;
-  // let formattedDate = dateRef.current.value;
+    let dateActiv = new Date();
+    // let dateActiv = "2025-03-08";
+    let formattedDate = new Intl.DateTimeFormat("en-CA").format(dateActiv);
+    // let formattedDate = dateActiv;
+    // let formattedDate = dateRef.current.value;
     const todayDate = new Date();
+    if (+taraweehRakaatRef.current.value % 2 !== 0) {
+      taraweehRakaatRef.current.value = +taraweehRakaatRef.current.value - 1;
+    }
+
+    if (iftarRef.current.value > 10) {
+      iftarRef.current.value = 10;
+    }
 
     const data = {
-        date: todayDate,
-        fajr: {
-            type: fajrRef.current.value == 1000 ? "في المسجد"
-                : fajrRef.current.value == 900 && userGender == "female" ? "عذر قهري "
-                : fajrRef.current.value == 910 ? "في الوقت"
-                : fajrRef.current.value == 700 ? "حاضر"
-                : fajrRef.current.value == 300 ? "تأخير "
-                : fajrRef.current.value == 100 ? "قضاء " : "لم يحدد",
-            azkar: fajrAzkarRef.current.checked,
-            points: +fajrRef.current.value + (fajrAzkarRef.current.checked ? 50 : 0),
-        },
-        dhuhr: {
-            type: dhuhrRef.current.value == 1000 ? "في المسجد"
-                : dhuhrRef.current.value == 900 && userGender == "female" ? "عذر قهري "
-                : dhuhrRef.current.value == 910 ? "في الوقت"
-                : dhuhrRef.current.value == 700 ? "حاضر"
-                : dhuhrRef.current.value == 300 ? "تأخير "
-                : dhuhrRef.current.value == 100 ? "قضاء " : "لم يحدد",
-            azkar: dhuhrAzkarRef.current.checked,
-            points: +dhuhrRef.current.value + (dhuhrAzkarRef.current.checked ? 50 : 0),
-        },
-        asr: {
-            type: asrRef.current.value == 1000 ? "في المسجد"
-                : asrRef.current.value == 900 && userGender == "female" ? "عذر قهري "
-                : asrRef.current.value == 910 ? "في الوقت"
-                : asrRef.current.value == 700 ? "حاضر"
-                : asrRef.current.value == 300 ? "تأخير "
-                : asrRef.current.value == 100 ? "قضاء " : "لم يحدد",
-            azkar: asrAzkarRef.current.checked,
-            points: +asrRef.current.value + (asrAzkarRef.current.checked ? 50 : 0),
-        },
-        maghrib: {
-            type: maghribRef.current.value == 1000 ? "في المسجد"
-                : maghribRef.current.value == 900 && userGender == "female" ? "عذر قهري "
-                : maghribRef.current.value == 910 ? "في الوقت"
-                : maghribRef.current.value == 700 ? "حاضر"
-                : maghribRef.current.value == 300 ? "تأخير "
-                : maghribRef.current.value == 100 ? "قضاء " : "لم يحدد",
-            azkar: maghribAzkarRef.current.checked,
-            points: +maghribRef.current.value + (maghribAzkarRef.current.checked ? 50 : 0),
-        },
-        isha: {
-            type: ishaRef.current.value == 1000 ? "في المسجد"
-                : ishaRef.current.value == 900 && userGender == "female" ? "عذر قهري "
-                : ishaRef.current.value == 910 ? "في الوقت"
-                : ishaRef.current.value == 700 ? "حاضر"
-                : ishaRef.current.value == 300 ? "تأخير "
-                : ishaRef.current.value == 100 ? "قضاء " : "لم يحدد",
-            azkar: ishaAzkarRef.current.checked,
-            points: +ishaRef.current.value + (ishaAzkarRef.current.checked ? 50 : 0),
-        },
-        quran: {
-            numOfPages: +quranRef.current.value,
-            points: +quranRef.current.value * 30,
-        },
-        duha: {
-            numOfPray: +duhaRef.current.value,
-            points: +duhaRef.current.value * 50,
-        },
-        taraweeh: {
-            type: taraweehPlaceRef.current.value == 60 ? "في المسجد " : "في البيت ",
-            numOfPray: +taraweehRakaatRef.current.value,
-            witr: witrRef.current.checked,
-            points: +taraweehRakaatRef.current.value * (taraweehPlaceRef.current.value ? +taraweehPlaceRef.current.value : 0) + (witrRef.current.checked ? 80 : 0),
-        },
-        tahajjud: {
-            numOfPray: +tahagodRed.current.value,
-            points: +tahagodRed.current.value * 70,
-        },
-        rawatib: {
-            numOfPray: +rawatibPrayersRef.current.value,
-            points: +rawatibPrayersRef.current.value * 50,
-        },
-        adhkar: {
-            morning: morningAdhkarRef.current.checked,
-            evening: eveningAdhkarRef.current.checked,
-            general: +generalAdhkarRef.current.value,
-            points: (morningAdhkarRef.current.checked ? 200 : 0) +
-                (eveningAdhkarRef.current.checked ? 200 : 0) +
-                (+generalAdhkarRef.current.value / 1000) * 200,
-        },
-        
-      questionData : {
+      date: todayDate,
+      fajr: {
+        type:
+          fajrRef.current.value == 1000
+            ? "في المسجد"
+            : fajrRef.current.value == 900 && userGender == "female"
+              ? "عذر قهري "
+              : fajrRef.current.value == 910
+                ? "في الوقت"
+                : fajrRef.current.value == 700
+                  ? "حاضر"
+                  : fajrRef.current.value == 300
+                    ? "تأخير "
+                    : fajrRef.current.value == 100
+                      ? "قضاء "
+                      : "لم يحدد",
+        azkar: fajrAzkarRef.current.checked,
+        points:
+          +fajrRef.current.value + (fajrAzkarRef.current.checked ? 50 : 0),
+      },
+      dhuhr: {
+        type:
+          dhuhrRef.current.value == 1000
+            ? "في المسجد"
+            : dhuhrRef.current.value == 900 && userGender == "female"
+              ? "عذر قهري "
+              : dhuhrRef.current.value == 910
+                ? "في الوقت"
+                : dhuhrRef.current.value == 700
+                  ? "حاضر"
+                  : dhuhrRef.current.value == 300
+                    ? "تأخير "
+                    : dhuhrRef.current.value == 100
+                      ? "قضاء "
+                      : "لم يحدد",
+        azkar: dhuhrAzkarRef.current.checked,
+        points:
+          +dhuhrRef.current.value + (dhuhrAzkarRef.current.checked ? 50 : 0),
+      },
+      asr: {
+        type:
+          asrRef.current.value == 1000
+            ? "في المسجد"
+            : asrRef.current.value == 900 && userGender == "female"
+              ? "عذر قهري "
+              : asrRef.current.value == 910
+                ? "في الوقت"
+                : asrRef.current.value == 700
+                  ? "حاضر"
+                  : asrRef.current.value == 300
+                    ? "تأخير "
+                    : asrRef.current.value == 100
+                      ? "قضاء "
+                      : "لم يحدد",
+        azkar: asrAzkarRef.current.checked,
+        points: +asrRef.current.value + (asrAzkarRef.current.checked ? 50 : 0),
+      },
+      maghrib: {
+        type:
+          maghribRef.current.value == 1000
+            ? "في المسجد"
+            : maghribRef.current.value == 900 && userGender == "female"
+              ? "عذر قهري "
+              : maghribRef.current.value == 910
+                ? "في الوقت"
+                : maghribRef.current.value == 700
+                  ? "حاضر"
+                  : maghribRef.current.value == 300
+                    ? "تأخير "
+                    : maghribRef.current.value == 100
+                      ? "قضاء "
+                      : "لم يحدد",
+        azkar: maghribAzkarRef.current.checked,
+        points:
+          +maghribRef.current.value +
+          (maghribAzkarRef.current.checked ? 50 : 0),
+      },
+      isha: {
+        type:
+          ishaRef.current.value == 1000
+            ? "في المسجد"
+            : ishaRef.current.value == 900 && userGender == "female"
+              ? "عذر قهري "
+              : ishaRef.current.value == 910
+                ? "في الوقت"
+                : ishaRef.current.value == 700
+                  ? "حاضر"
+                  : ishaRef.current.value == 300
+                    ? "تأخير "
+                    : ishaRef.current.value == 100
+                      ? "قضاء "
+                      : "لم يحدد",
+        azkar: ishaAzkarRef.current.checked,
+        points:
+          +ishaRef.current.value + (ishaAzkarRef.current.checked ? 50 : 0),
+      },
+      quran: {
+        numOfPages: +quranRef.current.value,
+        points: +quranRef.current.value * 30,
+      },
+      duha: {
+        numOfPray: +duhaRef.current.value,
+        points: +duhaRef.current.value * 50,
+      },
+      taraweeh: {
+        type: taraweehPlaceRef.current.value == 60 ? "في المسجد " : "في البيت ",
+        numOfPray: +taraweehRakaatRef.current.value,
+        witr: witrRef.current.checked,
+        points:
+          +taraweehRakaatRef.current.value *
+            (taraweehPlaceRef.current.value
+              ? +taraweehPlaceRef.current.value
+              : 0) +
+          (witrRef.current.checked ? 80 : 0),
+      },
+      // tahajjud: {
+      //   numOfPray: +tahagodRed.current.value || 0,
+      //   points: +tahagodRed.current.value * 70 || 0,
+      // },
+      rawatib: {
+        numOfPray: +rawatibPrayersRef.current.value,
+        points: +rawatibPrayersRef.current.value * 50,
+      },
+      adhkar: {
+        morning: morningAdhkarRef.current.checked,
+        evening: eveningAdhkarRef.current.checked,
+        general: +generalAdhkarRef.current.value,
+        points:
+          (morningAdhkarRef.current.checked ? 200 : 0) +
+          (eveningAdhkarRef.current.checked ? 200 : 0) +
+          (+generalAdhkarRef.current.value / 1000) * 200,
+      },
+
+      questionData: {
         question: "",
         answer: "",
-        points: 0, 
-        date: "", 
+        points: 0,
+        date: "",
       },
-      try:  activitiesHistory[formattedDate]?.try !== undefined 
-      ? activitiesHistory[formattedDate].try + 1 
-      : 0,
-      
-        extra: {
-            iftar: +iftarRef.current.value,
-            visitPatient: visitPatientRef.current.checked,
-            charity: charityRef.current.checked,
-            funeral: funeralRef.current.checked,
-            prayFor: prayForRef.current.checked,
-            points: +iftarRef.current.value * 100 +
-                (visitPatientRef.current.checked ? 200 : 0) +
-                (charityRef.current.checked ? 100 : 0) +
-                (funeralRef.current.checked ? 200 : 0) +
-                (prayForRef.current.checked ? 200 : 0),
-        },
-        Omra:{
-          omraBoolian: omra.current.checked,
-          points: +omra.current.checked ? 600 : 0,
-        },
-        Iktaf:{
-          etkafTime: +etkaf.current.value,
-          points: +etkaf.current.value ,
-        },
+      try:
+        activitiesHistory[formattedDate]?.try !== undefined
+          ? activitiesHistory[formattedDate].try + 1
+          : 0,
+
+      extra: {
+        iftar: +iftarRef.current.value,
+        visitPatient: visitPatientRef.current.checked,
+        charity: charityRef.current.checked,
+        funeral: funeralRef.current.checked,
+        prayFor: prayForRef.current.checked,
+        points:
+          +iftarRef.current.value * 100 +
+          (visitPatientRef.current.checked ? 200 : 0) +
+          (charityRef.current.checked ? 100 : 0) +
+          (funeralRef.current.checked ? 200 : 0) +
+          (prayForRef.current.checked ? 200 : 0),
+      },
+      // Omra: {
+      //   omraBoolian: omra.current.checked,
+      //   points: +omra.current.checked ? 600 : 0,
+      // },
+      // Iktaf: {
+      //   etkafTime: +etkaf.current.value,
+      //   points: +etkaf.current.value,
+      // },
     };
     const userRef = doc(db, "users", userEmail);
 
+    const newPoints =
+      data.fajr.points +
+      data.dhuhr.points +
+      data.asr.points +
+      data.maghrib.points +
+      data.isha.points +
+      data.quran.points +
+      data.duha.points +
+      data.taraweeh.points +
+      //  data.tahajjud.points +
+      data.rawatib.points +
+      data.adhkar.points +
+      data.extra.points;
+    //  data.Omra.points +
+    //   data.Iktaf.points;
 
-
-    const newPoints = data.fajr.points + data.dhuhr.points + data.asr.points +
-        data.maghrib.points + data.isha.points + data.quran.points +
-        data.duha.points + data.taraweeh.points + data.tahajjud.points +
-        data.rawatib.points + data.adhkar.points + data.extra.points + data.Omra.points + data.Iktaf.points;
-
-      
     data.totalPointsPerDay = newPoints;
     data.lastRecord = newPoints;
     localStorage.setItem("totalPoints", JSON.stringify(totalPoints));
-
 
     try {
       const parsedUser = JSON.parse(storedUser);
       // Check if data exists for the date
       if (!modifyData.activities[formattedDate]) {
         setActivitiesPoints({ data });
-        const num = data.totalPointsPerDay + totalPoints
-              await updateDoc(userRef, {
-                [`activities.${formattedDate}`]: data,
-                totalPoints: num,
-                lastRecord:newPoints
-              });
-             
+        const num = data.totalPointsPerDay + totalPoints;
+        await updateDoc(userRef, {
+          [`activities.${formattedDate}`]: data,
+          totalPoints: num,
+          lastRecord: newPoints,
+        });
+
         console.log("تم حفظ البيانات وتحديث النقاط بنجاح في Firestore");
         navigate("/Quran_Compition/standing");
       } else {
-        setLastRecord(modifyData.lastRecord)
-        console.log("last",totalPoints, lastRecord,newPoints)
-        const num=totalPoints - lastRecord + newPoints
+        setLastRecord(modifyData.lastRecord);
+        console.log("last", totalPoints, lastRecord, newPoints);
+        const num = totalPoints - lastRecord + newPoints;
         setTotalPoints(num);
-        console.log("last",totalPoints, lastRecord,newPoints)
+        console.log("last", totalPoints, lastRecord, newPoints);
         setActivitiesPoints({ data });
         await updateDoc(userRef, {
           [`activities.${formattedDate}`]: data,
           totalPoints: num,
-          lastRecord:newPoints
+          lastRecord: newPoints,
         });
         console.log("تم العثور على البيانات بالفعل، لن يتم الإضافة");
         navigate("/Quran_Compition/routinPage");
       }
+    } catch (error) {
+      console.error("خطأ في حفظ البيانات:", error);
     }
-     catch (error) {
-        console.error("خطأ في حفظ البيانات:", error);
-    }
-}
+  }
 
   const prayers = [
     { id: "fajr", value: "الفجر", salahRef: fajrRef, azkarRef: fajrAzkarRef },
@@ -338,14 +401,13 @@ const Home = () => {
   console.log(visitPatientRef.current?.checked);
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 py-6 px-4">
-     <Link
-            className="inline-flex mb-1.5 items-center text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-2 rounded-md text-sm transition-all"
-            to={"/Quran_Compition/routinPage"}
-          >
-           العودة إلى الصفحة الرئيسية
-          </Link>
+      <Link
+        className="inline-flex mb-1.5 items-center text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-2 rounded-md text-sm transition-all"
+        to={"/Quran_Compition/routinPage"}
+      >
+        العودة إلى الصفحة الرئيسية
+      </Link>
       <div className="max-w-4xl mx-auto bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-6">
-      
         <div className="flex flex-col items-center mb-6 border-b pb-4">
           <FaMoon className="text-yellow-400 w-12 h-12" />
           <h1 className="text-3xl font-bold text-center mt-2 text-indigo-900">
@@ -363,8 +425,7 @@ const Home = () => {
               التعليمات والشروط
             </Link>
           </div>
-          
-         
+
           <div className="bg-indigo-50 p-4 rounded-lg">
             <h2 className="text-xl font-bold text-indigo-800 mb-4 flex items-center">
               <FaCheckCircle className="ml-2" />
@@ -393,7 +454,7 @@ const Home = () => {
                           ref={prayer.salahRef}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md"
                         >
-                           <option value={0}>لم يتم الصلاه (0 نقطة)</option>
+                          <option value={0}>لم يتم الصلاه (0 نقطة)</option>
                           <option value={1000}>
                             جماعة في المسجد (1000 نقطة)
                           </option>
@@ -406,7 +467,6 @@ const Home = () => {
                           ref={prayer.salahRef}
                           className="w-full px-4 py-2 border border-gray-300 rounded-md"
                         >
-                           
                           <option value={0}>لم يتم الصلاه (0 نقطة)</option>
                           <option value={910}>في الوقت (910 نقطة)</option>
                           <option value={300}>متأخر (300 نقطة)</option>
@@ -467,7 +527,8 @@ const Home = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-md outline-none"
               />
               <span className="text-sm text-gray-500 block mt-1">
-                * تشمل سنن الفجر (2 ركعة)، سنن الظهر (2+4 ركعة)، سنن المغرب (2 ركعة)، سنن العشاء (2 ركعة)
+                * تشمل سنن الفجر (2 ركعة)، سنن الظهر (2+4 ركعة)، سنن المغرب (2
+                ركعة)، سنن العشاء (2 ركعة)
               </span>
             </div>
           </div>
@@ -527,7 +588,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="bg-purple-50 p-4 rounded-lg">
+          {/* <div className="bg-purple-50 p-4 rounded-lg">
             <h2 className="text-xl font-bold text-purple-800 mb-4 flex items-center">
               <FaMoon className="ml-2" />
               صلاة التهجد
@@ -543,9 +604,9 @@ const Home = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-md"
               />
             </div>
-          </div>
-    
-          <div className="bg-purple-50 p-4 rounded-lg">
+          </div> */}
+
+          {/* <div className="bg-purple-50 p-4 rounded-lg">
   <h2 className="text-xl font-bold text-purple-800 mb-4 flex items-center">
     <FaKaaba className="ml-2" />
     العمره والحج
@@ -566,9 +627,9 @@ const Home = () => {
     جلس يذكر الله حتى تطلع الشمس ثم قام فصلى ركعتين انقلب بأجر حجة وعمرة.
     رواه الطبراني، وقال الألباني إسناده جيد.
   </span>
-</div> 
+</div>  */}
 
-<div className="bg-green-50 p-4 rounded-lg">
+          {/* <div className="bg-green-50 p-4 rounded-lg">
   <h2 className="text-xl font-bold text-green-800 mb-4 flex items-center">
     <FaBookOpen className="ml-2" />
     الاعتكاف
@@ -595,8 +656,7 @@ const Home = () => {
   <span className="text-sm text-red-500 block mt-4">
     * عن عائشة رضي الله عنها أن النبي صلى الله عليه وسلم: (كان يعتكف العشر الأواخر من رمضان حتى توفاه الله عز وجل، ثم اعتكف أزواجه من بعده)، متفق عليه
   </span>
-</div>
-         
+</div> */}
 
           <div className="bg-teal-50 p-4 rounded-lg">
             <h2 className="text-xl font-bold text-teal-800 mb-4 flex items-center">
@@ -653,6 +713,9 @@ const Home = () => {
                 <label className="block text-gray-700 mb-2">
                   عدد الأشخاص الذين تم إفطارهم (100 نقطة لكل شخص):
                 </label>
+                <p className="text-sm text-red-500">
+                  عدد الاشخاص لا يتجاوز 10{" "}
+                </p>
                 <input
                   ref={iftarRef}
                   type="number"
@@ -708,7 +771,6 @@ const Home = () => {
                   الصالحة 💍
                 </span>
               </div>
-             
             </div>
           </div>
 

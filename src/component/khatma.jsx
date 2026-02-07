@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaQuran, FaPlay, FaPause } from "react-icons/fa";
 import khatmahData from "../ad3ya.json";
@@ -6,7 +6,7 @@ import khatmahData from "../ad3ya.json";
 const Khatmah = () => {
   const navigate = useNavigate();
   const data = khatmahData.ad3ya;
-  
+
   // State to track which supplication is expanded
   const [expandedId, setExpandedId] = useState(null);
 
@@ -20,8 +20,8 @@ const Khatmah = () => {
 
   // Function to toggle audio play/pause
   const toggleAudio = () => {
-    const audio = document.getElementById('khatmah-audio');
-    
+    const audio = document.getElementById("khatmah-audio");
+
     if (audio) {
       if (isPlaying) {
         audio.pause();
@@ -53,16 +53,16 @@ const Khatmah = () => {
           <p className="text-xl text-indigo-800 font-bold mb-4">
             لمن لا يستطيع القراءة فليستمع
           </p>
-          
+
           <div className="flex justify-center">
             <div className="bg-purple-50 p-3 rounded-lg shadow-md flex flex-col items-center">
-              <button 
+              <button
                 onClick={toggleAudio}
                 className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition-all"
               >
                 <FaQuran className="w-4 h-4" />
                 <span>
-                  {isPlaying ? 'إيقاف دعاء الختمة' : 'استماع لدعاء الختمة'}
+                  {isPlaying ? "إيقاف دعاء الختمة" : "استماع لدعاء الختمة"}
                 </span>
                 {isPlaying ? (
                   <FaPause className="w-3 h-3" />
@@ -70,12 +70,15 @@ const Khatmah = () => {
                   <FaPlay className="w-3 h-3" />
                 )}
               </button>
-              <audio 
-                id="khatmah-audio" 
-                className="mt-2 w-full" 
+              <audio
+                id="khatmah-audio"
+                className="mt-2 w-full"
                 onEnded={handleAudioEnd}
               >
-                <source src="/Quran_Compition/audio/khatmaDo3a.mp3" type="audio/mpeg" />
+                <source
+                  src="/Quran_Compition/audio/khatmaDo3a.mp3"
+                  type="audio/mpeg"
+                />
                 متصفحك لا يدعم تشغيل الصوت
               </audio>
             </div>
@@ -91,29 +94,37 @@ const Khatmah = () => {
           <div className="space-y-6 mt-6">
             {data.map((dua) => {
               const isExpanded = expandedId === dua.id;
-              
+
               return (
                 <div
                   key={dua.id}
                   className={`${
-                    isExpanded ? 'bg-purple-50' : 'bg-blue-50'
+                    isExpanded ? "bg-purple-50" : "bg-blue-50"
                   } p-4 rounded-lg space-y-2 shadow-md transition-all duration-300`}
                 >
-                  <div 
+                  <div
                     className="flex justify-between items-center cursor-pointer"
                     onClick={() => toggleExpansion(dua.id)}
                   >
-                    <h3 className="text-lg font-semibold text-indigo-800">{dua.title}</h3>
-                    <span className={`text-indigo-700 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
+                    <h3 className="text-lg font-semibold text-indigo-800">
+                      {dua.title}
+                    </h3>
+                    <span
+                      className={`text-indigo-700 transform transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                    >
                       ▼
                     </span>
                   </div>
-                  
-                  {isExpanded && (
-                    <div className="mt-4 text-lg/loose p-4 pb-8 border-b text-purple-700 border-b-indigo-500 bg-white/70 rounded-lg">
-                      {dua.text}
-                    </div>
-                  )}
+
+                  {isExpanded &&
+                    dua.items.map((item, index) => (
+                      <div
+                        key={index}
+                        className="bg-white/80 p-3 rounded-md shadow-sm"
+                      >
+                        <p className="text-right text-gray-800">{item}</p>
+                      </div>
+                    ))}
                 </div>
               );
             })}
