@@ -21,18 +21,18 @@ const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="Quran_Compition/login" element={<Login />} />
-        <Route path="Quran_Compition/signup" element={<SignUp />} />
-        <Route path="Quran_Compition/home" element={<Home />} />
-        <Route path="Quran_Compition/instructions" element={<Instructions />} />
-        <Route path="Quran_Compition" element={<Welcome />} />
-        <Route path="Quran_Compition/standing" element={<Standing />} />
-        <Route path="Quran_Compition/dayly-question" element={<Question />} />
-        <Route path="Quran_Compition/routinPage" element={<RoutingPage />} />
-        <Route path="Quran_Compition/activity" element={<Activity />} />
-        <Route path="Quran_Compition/azkar" element={<Azkar />} />
-        <Route path="Quran_Compition/master" element={<Master />} />
-        <Route path="Quran_Compition/khatma" element={<Khatma />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/instructions" element={<Instructions />} />
+        <Route path="/" element={<Welcome />} />
+        <Route path="/standing" element={<Standing />} />
+        <Route path="/dayly-question" element={<Question />} />
+        <Route path="/routinPage" element={<RoutingPage />} />
+        <Route path="/activity" element={<Activity />} />
+        <Route path="/azkar" element={<Azkar />} />
+        <Route path="/master" element={<Master />} />
+        <Route path="/khatma" element={<Khatma />} />
       </>,
     ),
   );
